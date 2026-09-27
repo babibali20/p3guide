@@ -1,0 +1,122 @@
+<title>Linux Boot Steps</title>
+<style>
+:root{
+  --bg:#faf9f7; --panel:#fff; --ink:#1a1a1a; --sub:#5a5650; --line:#e4e0d8;
+  --accent:#b5541a; --accent-bg:#fdf1e8; --code-bg:#f4f2ee; --ok:#2e7d32; --warn:#b5541a;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#1c1a17; --panel:#26231f; --ink:#f0ede6; --sub:#b8b2a6; --line:#3a352e;
+    --accent:#e08a4f; --accent-bg:#3a2a1c; --code-bg:#2f2b25; --ok:#7fbf7f; --warn:#e08a4f;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1c1a17; --panel:#26231f; --ink:#f0ede6; --sub:#b8b2a6; --line:#3a352e;
+  --accent:#e08a4f; --accent-bg:#3a2a1c; --code-bg:#2f2b25; --ok:#7fbf7f; --warn:#e08a4f;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:-apple-system,'Segoe UI',Roboto,sans-serif;
+  max-width:760px;margin:0 auto;padding:28px 20px 80px;line-height:1.55}
+h1{font-size:1.5rem;margin:0 0 4px}
+.sub{color:var(--sub);font-size:0.95rem;margin-bottom:28px}
+.goal{background:var(--accent-bg);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:28px;font-size:0.95rem}
+.goal b{color:var(--accent)}
+.part{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-bottom:16px}
+.part h2{font-size:1.05rem;margin:0 0 10px;display:flex;align-items:center;gap:10px}
+.num{background:var(--accent);color:#fff;width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:0.85rem;flex-shrink:0}
+ol,ul{margin:6px 0;padding-left:22px}
+li{margin:4px 0}
+code, pre{font-family:ui-monospace,'SF Mono',Consolas,monospace;font-size:0.88rem}
+pre{background:var(--code-bg);border:1px solid var(--line);border-radius:8px;padding:12px 14px;overflow-x:auto;margin:10px 0}
+code.inline{background:var(--code-bg);padding:2px 6px;border-radius:5px}
+.hash{word-break:break-all;background:var(--code-bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-size:0.82rem;margin:8px 0}
+.note{font-size:0.88rem;color:var(--sub);margin-top:8px}
+.stop{color:var(--warn);font-weight:600}
+.ok{color:var(--ok);font-weight:600}
+footer{text-align:center;color:var(--sub);font-size:0.85rem;margin-top:30px}
+</style>
+
+<h1>Project 3 — Linux Boot Steps</h1>
+<div class="sub">Reference sheet — readable from Ubuntu's own browser once you're connected to WiFi</div>
+
+<div class="goal">
+<b>Goal of this page:</b> get the iPad from DFU mode into a "PongoOS" shell for the first time, using the real palera1n tool on real (non-virtual) Linux. That's the only thing this covers. Uploading the kernel/module is a separate step after this is confirmed working.
+</div>
+
+<div class="part">
+<h2><span class="num">1</span> Boot into the USB</h2>
+<ol>
+<li>Start menu → Power → <b>Shut down</b> (full shutdown, not restart)</li>
+<li>Press the power button</li>
+<li>The instant it powers on, tap <code class="inline">Esc</code> repeatedly (HP Startup Menu)</li>
+<li>Press <code class="inline">F9</code> for Boot Device Options</li>
+<li>Arrow keys → select the USB drive → Enter</li>
+<li>At Ubuntu's screen, choose <b>"Try Ubuntu"</b> — never "Install Ubuntu"</li>
+</ol>
+</div>
+
+<div class="part">
+<h2><span class="num">2</span> Connect to WiFi</h2>
+<ol>
+<li>Click the network icon, top-right of the screen</li>
+<li>Select your WiFi network, enter the password, connect</li>
+</ol>
+</div>
+
+<div class="part">
+<h2><span class="num">3</span> Open a Terminal</h2>
+<ol>
+<li>Click "Activities" (top-left) or the search icon</li>
+<li>Type <code class="inline">terminal</code>, open it</li>
+</ol>
+</div>
+
+<div class="part">
+<h2><span class="num">4</span> Download and verify the exact tool</h2>
+<p>Paste each line, press Enter after each:</p>
+<pre>cd ~/Desktop</pre>
+<pre>wget https://github.com/palera1n/palera1n/releases/download/v2.0.0-beta.9/palera1n-linux-x86_64</pre>
+<pre>chmod +x palera1n-linux-x86_64</pre>
+<pre>sha256sum palera1n-linux-x86_64</pre>
+<p>Output must match exactly:</p>
+<div class="hash">5b6dec3a7ee15b14e989466a098d02edeb8455070009ffaa228caf2b3298dbd8</div>
+<p class="note"><span class="stop">If it does not match exactly — stop and report back before continuing.</span></p>
+</div>
+
+<div class="part">
+<h2><span class="num">5</span> iPad into DFU mode</h2>
+<ol>
+<li>Plug the iPad into the laptop via USB</li>
+<li>Hold <b>Power + Home</b> together for exactly <b>8 seconds</b></li>
+<li>At 8 seconds, release <b>Power only</b>, keep holding Home for <b>5 more seconds</b></li>
+<li>Screen must stay <b>completely black</b> the whole time. Apple logo appearing = failed, just retry.</li>
+</ol>
+</div>
+
+<div class="part">
+<h2><span class="num">6</span> Safe check (no changes made)</h2>
+<pre>./palera1n-linux-x86_64 -I</pre>
+<p>Expect to see:</p>
+<pre>Mode: DFU
+ProductType: iPad5,3
+DisplayName: iPad Air 2 (WiFi)</pre>
+<p class="note">If it hangs or shows nothing, the iPad dropped out of DFU — redo step 5.</p>
+</div>
+
+<div class="part">
+<h2><span class="num">7</span> The real step</h2>
+<pre>./palera1n-linux-x86_64 -p</pre>
+<ul>
+<li>May take 2–3 tries — <b>this is normal</b>, this exploit is a precise timing trick</li>
+<li>On error/failure: unplug cable, wait 2 sec, replug, redo step 5, run <code class="inline">-p</code> again</li>
+<li><span class="ok">Success looks like:</span> a wall of checkra1n/Pongo text, ending in a new prompt that just sits there waiting. Don't type anything else into it yet.</li>
+</ul>
+</div>
+
+<div class="part">
+<h2><span class="num">8</span> When you get there</h2>
+<p>Screenshot or photograph whatever the terminal shows — success or the exact error text after several tries. Then boot back to Windows (top-right power icon → Restart, remove the USB when prompted). Come back to the same chat and show what you got.</p>
+<p class="note stop">Don't type any command beyond what's listed here. If anything looks different from this description, stop and describe exactly what you see instead of guessing.</p>
+</div>
+
+<footer>Project 4 / Project 3 — iPad Air 2 research</footer>

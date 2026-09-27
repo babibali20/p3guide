@@ -1,0 +1,133 @@
+================================================================================
+PROJECT 3 — STEPS TO RUN INSIDE THE UBUNTU USB (do these in order)
+================================================================================
+GOAL OF THIS SHEET: get the iPad from DFU mode into a "PongoOS" shell for the
+first time, using the real palera1n tool on real (non-virtual) Linux. That is
+the ONLY thing this sheet does. Uploading our own kernel/module comes AFTER,
+in a separate step, once this part is confirmed working.
+
+--------------------------------------------------------------------------------
+PART 0 — BEFORE YOU RESTART THE LAPTOP
+--------------------------------------------------------------------------------
+- Make sure the Ubuntu USB drive is plugged into the laptop.
+- Have the iPad nearby (not necessarily plugged in yet).
+- Know your WiFi password (Ubuntu will need to connect to the internet once).
+
+--------------------------------------------------------------------------------
+PART 1 — BOOT INTO THE USB DRIVE
+--------------------------------------------------------------------------------
+1. Click Start -> Power -> Shut down (a full shutdown, not restart).
+2. Press the power button to turn it back on.
+3. The instant it powers on, start tapping the Esc key repeatedly.
+   (This is specific to HP laptops like yours — Esc opens the "Startup Menu".)
+4. When the Startup Menu appears, press F9. This opens "Boot Device Options".
+5. Use the arrow keys to highlight the USB drive in the list (it will mention
+   "USB" in its name), then press Enter.
+6. Ubuntu's boot screen appears. Use arrow keys if needed and select
+   "Try Ubuntu" (NOT "Install Ubuntu"). Press Enter.
+7. Wait for the Ubuntu desktop to load (can take 1-2 minutes).
+
+--------------------------------------------------------------------------------
+PART 2 — CONNECT TO WIFI
+--------------------------------------------------------------------------------
+1. Look at the top-right corner of the screen for a network/WiFi icon.
+2. Click it, select your WiFi network name from the list.
+3. Type your WiFi password, click Connect.
+4. Wait until it shows as connected.
+
+--------------------------------------------------------------------------------
+PART 3 — OPEN A TERMINAL
+--------------------------------------------------------------------------------
+1. Look for a "Activities" button (top-left) or a search icon.
+2. Type: terminal
+3. Click the "Terminal" application that appears. A black window with text
+   opens — this is where you will type all the commands below.
+
+--------------------------------------------------------------------------------
+PART 4 — DOWNLOAD AND VERIFY THE EXACT TOOL (copy-paste each line, press Enter)
+--------------------------------------------------------------------------------
+Type or paste this first line, press Enter:
+
+    cd ~/Desktop
+
+Then this line, press Enter (this downloads the exact file we already tested):
+
+    wget https://github.com/palera1n/palera1n/releases/download/v2.0.0-beta.9/palera1n-linux-x86_64
+
+Wait for it to finish (shows a progress bar, file is about 4.5 MB, should be
+quick). Then make it runnable:
+
+    chmod +x palera1n-linux-x86_64
+
+Now verify it is EXACTLY the same file we already tested (very important —
+do not skip this):
+
+    sha256sum palera1n-linux-x86_64
+
+The output MUST match exactly (case doesn't matter):
+
+    5b6dec3a7ee15b14e989466a098d02edeb8455070009ffaa228caf2b3298dbd8
+
+If it does NOT match exactly, STOP and tell me — do not proceed.
+
+--------------------------------------------------------------------------------
+PART 5 — CONNECT THE IPAD AND ENTER DFU MODE
+--------------------------------------------------------------------------------
+1. Plug the iPad into the laptop with a USB cable (any free port now — this
+   is real hardware, not the shared-port juggling from before).
+2. Put it into DFU mode, same as earlier:
+   - Hold Power + Home together for exactly 8 seconds.
+   - At 8 seconds, release Power only, keep holding Home for 5 more seconds.
+   - Screen must stay COMPLETELY BLACK the whole time. If the Apple logo
+     appears at any point, it failed — just try again from step 2.
+
+--------------------------------------------------------------------------------
+PART 6 — SAFE CHECK (does not touch anything, just confirms detection)
+--------------------------------------------------------------------------------
+In the terminal, type:
+
+    ./palera1n-linux-x86_64 -I
+
+Expected output includes lines like:
+
+    Mode: DFU
+    ProductType: iPad5,3
+    DisplayName: iPad Air 2 (WiFi)
+
+If you see that, we're good — continue. If it hangs or shows nothing, the
+iPad probably isn't in DFU mode anymore — redo Part 5.
+
+--------------------------------------------------------------------------------
+PART 7 — THE REAL STEP: RUN THE EXPLOIT
+--------------------------------------------------------------------------------
+Type:
+
+    ./palera1n-linux-x86_64 -p
+
+What you might see:
+  - It may take a few tries. This is NORMAL — this specific exploit is a
+    precise timing trick and commonly fails once or twice before succeeding,
+    even on ideal setups.
+  - If it prints an error and stops (mentions "Error" or "Failed" or
+    "Unable to perform checkm8"): the iPad likely dropped out of DFU mode.
+    Unplug the USB cable, wait 2 seconds, plug it back in, redo Part 5
+    (re-enter DFU), then run the "-p" command again.
+  - If it SUCCEEDS, the screen will show a bunch of "checkra1n"/Pongo-style
+    text, and you'll end up looking at a new prompt (something like a plain
+    "#" or a Pongo banner) that just sits there waiting for you to type
+    something. THIS is the success state. Do not type anything else into
+    it yet.
+
+--------------------------------------------------------------------------------
+PART 8 — WHEN YOU GET THERE
+--------------------------------------------------------------------------------
+Take a screenshot or photo of whatever the terminal shows (success OR the
+exact error text if it keeps failing after several tries), then boot back to
+Windows normally (Ubuntu's top-right power icon -> Restart, remove the USB
+drive when it says to). Reopen this same chat and show me what you got —
+I'll be right here.
+
+Do NOT type any commands beyond what's listed above. If something looks
+different from what's described here, stop and describe exactly what you
+see rather than guessing.
+================================================================================
