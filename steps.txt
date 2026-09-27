@@ -228,4 +228,85 @@ cable changes, optionally the passcode check) it still fails the exact same
 way every time -- that's the real point to stop and come back, ideally with
 the -v -v output. That's a real, worth-reporting result, not giving up
 early.
+
+--------------------------------------------------------------------------------
+PART 11 — YOU HAVE A LIVE PONGOOS SHELL -- NOW UPLOAD THE REAL FILES
+--------------------------------------------------------------------------------
+YOU ALREADY SUCCEEDED AT THE HARD PART. That "pongoOS 2.6.2-97c2800e" banner
+confirms it's the exact build our module was made for. This section gets our
+actual kernel/module files onto this Ubuntu session and runs them for real.
+It's a longer sequence -- go slowly, one command block at a time.
+
+STEP 1 -- Install GitHub's tool and log in (one-time):
+
+    sudo snap install gh
+    gh auth login
+
+Answer the prompts: GitHub.com -> HTTPS -> Login with a web browser. It
+will show a code and a URL. Open Firefox, go to that URL, type the code,
+click Authorize. Back in the terminal it should say you're logged in.
+
+STEP 2 -- Download the 4 real files (private) and our script (public):
+
+    mkdir -p ~/project3 && cd ~/project3
+    gh release download pongo-upload --repo babibali20/p3files
+    wget https://raw.githubusercontent.com/babibali20/p3guide/master/orchestrator_v3.py
+
+STEP 3 -- Verify every file is exact (important, don't skip):
+
+    sha256sum kernelcache.darwin22.20A5303i reloc-loader-v3 checkra1n-kpf-pongo RestoreRamDisk.pongo.lzma
+
+Must show exactly these four (order may differ):
+
+    E09B9279AA7418EC22F54A2DF3EDD38E732DC967C559CBD9D80FD5CFDC2CB4B2  kernelcache.darwin22.20A5303i
+    E5176595B567CB196F1BB348FF433B51F40E9A7B8565F42335864A65789194B4  reloc-loader-v3
+    D780687BB5B9E0206FAA8A287F95F5E1D9A654B10F4FB8B3A34B92625881A0EF  checkra1n-kpf-pongo
+    807CAE6E43E47B960CF828E6FDE234EE58A4AA9946EED51FED093450A19003F1  RestoreRamDisk.pongo.lzma
+
+If any of these don't match exactly, STOP and report back.
+
+STEP 4 -- Install the Python USB tools:
+
+    sudo apt update
+    sudo apt install -y python3-pip libusb-1.0-0
+    pip3 install --break-system-packages pyusb
+
+STEP 5 -- Get back to a fresh live connection:
+   Whatever terminal still shows "pongoOS>" -- press Ctrl+C in it to close
+   that session (our script needs to open the USB connection itself, so
+   that old one needs to let go of it first).
+
+   Then: unplug the iPad, wait 5-10 seconds, plug it back in, redo DFU
+   entry (Part 5), and -- from wherever you saved palera1n-linux-x86_64
+   (likely ~/Desktop) -- run it again:
+
+       cd ~/Desktop && sudo ./palera1n-linux-x86_64 -p
+
+   Wait for the same "Checkmate!" -> PongoOS banner you got before. This
+   should go faster now since you already know the working port/cable
+   setup. Once you see the pongoOS> prompt again, press Ctrl+C immediately
+   to free up the connection for our own script.
+
+STEP 6 -- Run our script for real:
+
+    cd ~/project3
+    sudo python3 orchestrator_v3.py --dry-run --pkg-dir .
+
+Must end with "STATIC VALIDATION: PASS". If not, stop and report back.
+
+    sudo python3 orchestrator_v3.py --list-devices
+
+Should show a device with VID=05ac PID=4141 (that's Pongo mode). If it
+shows nothing, the device likely isn't sitting in Pongo mode anymore --
+redo Step 5.
+
+If that looks right, the real run:
+
+    sudo python3 orchestrator_v3.py --execute --pkg-dir .
+
+This uploads our module, the kernel, the KPF, and the ramdisk, and issues
+the exact command sequence, printing every step live. SCREENSHOT OR
+PHOTOGRAPH THE FULL OUTPUT, especially the very end (success markers, or
+exactly where/how it stops). This is the actual moment of truth -- bring
+back whatever it shows, success or not.
 ================================================================================

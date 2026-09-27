@@ -181,4 +181,46 @@ This won't fix it alone, but if you do need to come back and ask, this output is
 <p class="note">If after genuinely working through all of this (15-20+ tries, power/port/cable changes, optionally the passcode check) it still fails the exact same way every time — that's the real point to stop and come back, ideally with the <code class="inline">-v -v</code> output. That's a real, worth-reporting result, not giving up early.</p>
 </div>
 
+<div class="part" style="border-color:var(--accent)">
+<h2><span class="num">11</span> You have a live PongoOS shell — now upload the real files</h2>
+<p><b>You already succeeded at the hard part.</b> That "pongoOS 2.6.2-97c2800e" banner confirms it's the exact build our module was made for. This section gets our actual kernel/module files onto this Ubuntu session and runs them for real. It's a longer sequence — go slowly, one command block at a time.</p>
+
+<h3>Step 1 — Install GitHub's tool and log in (one-time)</h3>
+<pre>sudo snap install gh</pre>
+<pre>gh auth login</pre>
+<p>Answer the prompts: <b>GitHub.com</b> → <b>HTTPS</b> → <b>Login with a web browser</b>. It will show a code and tell you to open a URL. Open Firefox, go to that URL, type the code, click Authorize. Come back to the terminal — it should say you're logged in.</p>
+
+<h3>Step 2 — Download the 4 real files (private) and our script (public)</h3>
+<pre>mkdir -p ~/project3 && cd ~/project3</pre>
+<pre>gh release download pongo-upload --repo babibali20/p3files</pre>
+<pre>wget https://raw.githubusercontent.com/babibali20/p3guide/master/orchestrator_v3.py</pre>
+
+<h3>Step 3 — Verify every file is exact (important, don't skip)</h3>
+<pre>sha256sum kernelcache.darwin22.20A5303i reloc-loader-v3 checkra1n-kpf-pongo RestoreRamDisk.pongo.lzma</pre>
+<p>Must show exactly these four (order may differ):</p>
+<div class="hash">E09B9279AA7418EC22F54A2DF3EDD38E732DC967C559CBD9D80FD5CFDC2CB4B2  kernelcache.darwin22.20A5303i<br>E5176595B567CB196F1BB348FF433B51F40E9A7B8565F42335864A65789194B4  reloc-loader-v3<br>D780687BB5B9E0206FAA8A287F95F5E1D9A654B10F4FB8B3A34B92625881A0EF  checkra1n-kpf-pongo<br>807CAE6E43E47B960CF828E6FDE234EE58A4AA9946EED51FED093450A19003F1  RestoreRamDisk.pongo.lzma</div>
+<p class="stop">If any of these don't match exactly, stop and report back.</p>
+
+<h3>Step 4 — Install the Python USB tools</h3>
+<pre>sudo apt update</pre>
+<pre>sudo apt install -y python3-pip libusb-1.0-0</pre>
+<pre>pip3 install --break-system-packages pyusb</pre>
+
+<h3>Step 5 — Get back to a fresh live connection</h3>
+<p>Whatever terminal still shows "pongoOS>" — press <code class="inline">Ctrl+C</code> in it to close that session (our script needs to open the USB connection itself, so that old one needs to let go of it first).</p>
+<p>Then: unplug the iPad, wait 5-10 seconds, plug it back in, redo DFU entry (Section 5), and — from wherever you saved <code class="inline">palera1n-linux-x86_64</code> (likely <code class="inline">~/Desktop</code>) — run it again:</p>
+<pre>cd ~/Desktop && sudo ./palera1n-linux-x86_64 -p</pre>
+<p>Wait for the same "Checkmate!" → PongoOS banner you got before. This should now go faster since you already know the working port/cable setup. Once you see the <code class="inline">pongoOS&gt;</code> prompt again, press <code class="inline">Ctrl+C</code> immediately to free up the connection for our own script.</p>
+
+<h3>Step 6 — Run our script for real</h3>
+<pre>cd ~/project3</pre>
+<pre>sudo python3 orchestrator_v3.py --dry-run --pkg-dir .</pre>
+<p>Must end with <code class="inline">STATIC VALIDATION: PASS</code>. If not, stop and report back.</p>
+<pre>sudo python3 orchestrator_v3.py --list-devices</pre>
+<p>Should show a device with <code class="inline">VID=05ac PID=4141</code> (that's Pongo mode). If it shows nothing, the device likely isn't sitting in Pongo mode anymore — redo Step 5.</p>
+<p>If that looks right, the real run:</p>
+<pre>sudo python3 orchestrator_v3.py --execute --pkg-dir .</pre>
+<p>This uploads our module, the kernel, the KPF, and the ramdisk, and issues the exact command sequence, printing every step live. <b>Screenshot or photograph the full output</b>, especially the very end (success markers, or exactly where/how it stops). This is the actual moment of truth — bring back whatever it shows, success or not.</p>
+</div>
+
 <footer>Project 4 / Project 3 — iPad Air 2 research</footer>
