@@ -106,17 +106,51 @@ DisplayName: iPad Air 2 (WiFi)</pre>
 <div class="part">
 <h2><span class="num">7</span> The real step</h2>
 <pre>./palera1n-linux-x86_64 -p</pre>
-<ul>
-<li>May take 2–3 tries — <b>this is normal</b>, this exploit is a precise timing trick</li>
-<li>On error/failure: unplug cable, wait 2 sec, replug, redo step 5, run <code class="inline">-p</code> again</li>
-<li><span class="ok">Success looks like:</span> a wall of checkra1n/Pongo text, ending in a new prompt that just sits there waiting. Don't type anything else into it yet.</li>
-</ul>
+<p>Then immediately go to <b>Section 9 below</b> and follow whichever branch matches what you see. Don't guess — find your exact situation in the list.</p>
 </div>
 
-<div class="part">
-<h2><span class="num">8</span> When you get there</h2>
-<p>Screenshot or photograph whatever the terminal shows — success or the exact error text after several tries. Then boot back to Windows (top-right power icon → Restart, remove the USB when prompted). Come back to the same chat and show what you got.</p>
-<p class="note stop">Don't type any command beyond what's listed here. If anything looks different from this description, stop and describe exactly what you see instead of guessing.</p>
+<div class="part" style="border-color:var(--accent)">
+<h2><span class="num">9</span> Troubleshooting — find what you're seeing</h2>
+
+<h3 style="margin-top:0">A. First, always run this one check:</h3>
+<pre>lsusb</pre>
+<p>Look through the list it prints for a line containing <code class="inline">05ac</code> (that's Apple's ID). Then go to the branch below that matches:</p>
+
+<h3>B. <code class="inline">lsusb</code> shows NOTHING with 05ac in it at all</h3>
+<p>The iPad isn't connected or isn't in DFU mode. Do this:</p>
+<ol>
+<li>Check the USB cable is firmly plugged in at both ends</li>
+<li>Try a <b>different USB port</b> on the laptop if one is free</li>
+<li>Redo DFU entry exactly: Power+Home 8 sec together → release Power only → hold Home 5 more sec → screen must stay pure black the entire time</li>
+<li>Run <code class="inline">lsusb</code> again after each attempt</li>
+<li>Repeat up to 5 times. If still nothing after 5 clean attempts, stop and note that — it's worth reporting, not normal.</li>
+</ol>
+
+<h3>C. <code class="inline">lsusb</code> DOES show an Apple device with ID <code class="inline">05ac:1227</code></h3>
+<p>Good — DFU mode is real and Linux sees it. Now run:</p>
+<pre>./palera1n-linux-x86_64 -I</pre>
+<p>Expected good output includes <code class="inline">Mode: DFU</code> and <code class="inline">ProductType: iPad5,3</code>.</p>
+<ul>
+<li><b>If that text appears:</b> go straight to branch D below.</li>
+<li><b>If it hangs with no output, or only shows the startup banner and the usbmuxd warning with nothing after:</b> press Ctrl+C to stop it, then try running it with elevated permissions instead:
+<pre>sudo ./palera1n-linux-x86_64 -I</pre>
+(If it asks for a password and you don't have one set, just press Enter — the default Ubuntu Live session often has no password.)
+</li>
+<li><b>If that still shows nothing after ~15 seconds:</b> unplug the USB cable, wait 2 seconds, plug back in, redo DFU entry (step 5), and try the <code class="inline">-I</code> check again from the top of branch C. Repeat up to 3 times.</li>
+</ul>
+
+<h3>D. <code class="inline">-I</code> correctly shows Mode: DFU / iPad5,3 — now run the real exploit:</h3>
+<pre>./palera1n-linux-x86_64 -p</pre>
+<p>(add <code class="inline">sudo</code> in front too if step C needed it: <code class="inline">sudo ./palera1n-linux-x86_64 -p</code>)</p>
+<ul>
+<li><b>If it prints an error/"Failed"/"Unable to perform checkm8" and stops:</b> this is a known, normal thing — this exploit is a timing trick and often needs several tries. Unplug the cable, wait 2 sec, replug, redo DFU entry (step 5), run <code class="inline">-p</code> again. <b>Repeat up to 6-7 times</b> before treating it as a real problem — this is genuinely expected, not a sign of failure.</li>
+<li><b>If it hangs at "Waiting for devices" for more than ~30 seconds without progressing:</b> same fix — Ctrl+C, unplug/replug, redo DFU, try again.</li>
+<li><b>If the exact same specific error text repeats identically after 6-7 clean attempts</b> (same wording every time, not just "still waiting"): stop, write down or screenshot the exact error text, and that's what to bring back — don't keep looping past that point.</li>
+<li><span class="ok"><b>If you see a wall of checkra1n/Pongo-style text and it ends on a new prompt that just sits there waiting for input:</b></span> that's success. Stop. Don't type anything else into it.</li>
+</ul>
+
+<h3>E. Once you have an outcome (success OR a repeating identical error after 6-7 tries)</h3>
+<p>Screenshot or photograph exactly what the terminal shows. Boot back to Windows (top-right power icon → Restart, remove the USB when prompted). Come back to the same chat and show what you got — include which branch (B/C/D) you ended up on, and how many tries it took.</p>
 </div>
 
 <footer>Project 4 / Project 3 — iPad Air 2 research</footer>
