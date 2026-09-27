@@ -143,14 +143,42 @@ DisplayName: iPad Air 2 (WiFi)</pre>
 <pre>./palera1n-linux-x86_64 -p</pre>
 <p>(add <code class="inline">sudo</code> in front too if step C needed it: <code class="inline">sudo ./palera1n-linux-x86_64 -p</code>)</p>
 <ul>
-<li><b>If it prints an error/"Failed"/"Unable to perform checkm8" and stops:</b> this is a known, normal thing — this exploit is a timing trick and often needs several tries. Unplug the cable, wait 2 sec, replug, redo DFU entry (step 5), run <code class="inline">-p</code> again. <b>Repeat up to 6-7 times</b> before treating it as a real problem — this is genuinely expected, not a sign of failure.</li>
-<li><b>If it hangs at "Waiting for devices" for more than ~30 seconds without progressing:</b> same fix — Ctrl+C, unplug/replug, redo DFU, try again.</li>
-<li><b>If the exact same specific error text repeats identically after 6-7 clean attempts</b> (same wording every time, not just "still waiting"): stop, write down or screenshot the exact error text, and that's what to bring back — don't keep looping past that point.</li>
+<li><b>If it prints an error and stops before ever showing "Checkmate!":</b> unplug the cable, wait 2 sec, replug, redo DFU entry (step 5), run <code class="inline">-p</code> again.</li>
+<li><b>If it shows "Checkmate!" and then "Timed out waiting for download mode":</b> the exploit itself is WORKING — that's the hard part done. Go straight to <b>Section 10</b> below, which is entirely about fixing exactly this.</li>
 <li><span class="ok"><b>If you see a wall of checkra1n/Pongo-style text and it ends on a new prompt that just sits there waiting for input:</b></span> that's success. Stop. Don't type anything else into it.</li>
 </ul>
 
-<h3>E. Once you have an outcome (success OR a repeating identical error after 6-7 tries)</h3>
-<p>Screenshot or photograph exactly what the terminal shows. Boot back to Windows (top-right power icon → Restart, remove the USB when prompted). Come back to the same chat and show what you got — include which branch (B/C/D) you ended up on, and how many tries it took.</p>
+<h3>E. Once you have a real outcome (success, or you've worked all the way through Section 10 without success)</h3>
+<p>Screenshot or photograph exactly what the terminal shows. Boot back to Windows (top-right power icon → Restart, remove the USB when prompted). Come back to the same chat and show what you got — include which branch you ended up on, and roughly how many tries it took.</p>
+</div>
+
+<div class="part" style="border-color:var(--accent)">
+<h2><span class="num">10</span> Fixing "Checkmate!" then "Timed out waiting for download mode"</h2>
+<p>This exact message means the exploit already worked — you're past the hard part. This specific error is common and documented; here is everything known to help it, worth doing <b>all together</b>, not one at a time, since tonight's goal is getting it working, not isolating which one mattered:</p>
+
+<h3>Do all of these before your next batch of attempts:</h3>
+<ol>
+<li><b>Unplug the laptop's charger — run on battery only.</b> AC power noise is a documented cause of exactly this failure on some laptops.</li>
+<li><b>Use a different physical USB port</b> if the laptop has more than one free. USB 3.0 ports (often blue inside) are more likely to cause this than USB 2.0 ones — prefer a USB 2.0 port if you can identify one.</li>
+<li><b>Make sure there is no USB hub, dock, or extension cable</b> between the iPad and the laptop — plug directly into the laptop's own port.</li>
+<li><b>If you have a second USB-A cable available</b> (even an old one), try swapping it — shorter, simpler cables tend to be more reliable here than long or "fast charging" ones.</li>
+<li><b>Wait a full 5-10 seconds</b> after unplugging the iPad before plugging it back in (longer than before).</li>
+</ol>
+
+<h3>Then retry generously — this can genuinely take many attempts:</h3>
+<p>With the changes above in place: redo DFU entry (step 5) → run the safe check (<code class="inline">-I</code>, confirm Mode: DFU) → run <code class="inline">sudo ./palera1n-linux-x86_64 -p</code>. If it fails the same way, unplug/replug (5-10 sec wait), redo DFU, try again.</p>
+<p><b>Give this at least 15-20 attempts</b> before concluding it's not working — reaching "Checkmate!" reliably (which you already have) means the hardware/exploit combination genuinely works, and this specific reconnect step is known to sometimes just need persistence. Don't stop at attempt 5 or 6 and assume it's hopeless.</p>
+
+<h3>Optional extra things to check if 15-20 tries with the above still fail:</h3>
+<ul>
+<li><b>If the iPad has a passcode set:</b> reported to interfere with this exact step on some devices. If easy to do, temporarily turning off the passcode (Settings → Face/Touch ID & Passcode → Turn Passcode Off) before starting DFU mode is worth trying.</li>
+<li><b>Full fresh restart of the Ubuntu USB itself</b> (not just the iPad) — cold shutdown, boot back into the USB, in case something in the current session's USB state is stuck.</li>
+<li><b>Get more detail for next time with extra logging:</b>
+<pre>sudo ./palera1n-linux-x86_64 -v -v -p</pre>
+This won't fix it alone, but if you do need to come back and ask, this output is far more useful to look at than the plain version.</li>
+</ul>
+
+<p class="note">If after genuinely working through all of this (15-20+ tries, power/port/cable changes, optionally the passcode check) it still fails the exact same way every time — that's the real point to stop and come back, ideally with the <code class="inline">-v -v</code> output. That's a real, worth-reporting result, not giving up early.</p>
 </div>
 
 <footer>Project 4 / Project 3 — iPad Air 2 research</footer>
