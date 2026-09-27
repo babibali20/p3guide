@@ -268,8 +268,19 @@ If any of these don't match exactly, STOP and report back.
 STEP 4 -- Install the Python USB tools:
 
     sudo apt update
-    sudo apt install -y python3-pip libusb-1.0-0
-    pip3 install --break-system-packages pyusb
+    sudo apt install -y python3-usb libusb-1.0-0
+
+(Using python3-usb here, not "pip3 install pyusb" -- deliberate. Last time,
+pip installed it only for the normal user, and since the script needs to
+run as root via sudo to access the USB device, root couldn't see it and
+every run failed with "ModuleNotFoundError: No module named 'usb'". This
+apt package installs it system-wide, visible to root too.
+
+IF THIS EXACT ERROR STILL APPEARS ANYWAY (ModuleNotFoundError: No module
+named 'usb' when running with sudo): run
+    sudo pip3 install --break-system-packages pyusb
+instead -- note the "sudo" before "pip3" this time, which installs it for
+root directly.)
 
 STEP 5 -- Get back to a fresh live connection:
    Whatever terminal still shows "pongoOS>" -- press Ctrl+C in it to close
@@ -284,8 +295,17 @@ STEP 5 -- Get back to a fresh live connection:
 
    Wait for the same "Checkmate!" -> PongoOS banner you got before. This
    should go faster now since you already know the working port/cable
-   setup. Once you see the pongoOS> prompt again, press Ctrl+C immediately
-   to free up the connection for our own script.
+   setup. NOTE: if you see "Timed out waiting for download mode" appear,
+   don't assume it failed right away -- last time it recovered on its own
+   a few seconds later and succeeded anyway. Give it 5-10 extra seconds
+   before deciding to retry.
+
+   Check what you land on:
+   - If you see a pongoOS> prompt sitting there: press Ctrl+C to free up
+     the connection for our own script.
+   - If it already returned you to a normal shell prompt (like
+     "ubuntu@ubuntu:~$") without showing pongoOS>: you're already free to
+     continue, no Ctrl+C needed.
 
 STEP 6 -- Run our script for real:
 

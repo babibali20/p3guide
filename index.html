@@ -203,14 +203,20 @@ This won't fix it alone, but if you do need to come back and ask, this output is
 
 <h3>Step 4 — Install the Python USB tools</h3>
 <pre>sudo apt update</pre>
-<pre>sudo apt install -y python3-pip libusb-1.0-0</pre>
-<pre>pip3 install --break-system-packages pyusb</pre>
+<pre>sudo apt install -y python3-usb libusb-1.0-0</pre>
+<p class="note">Using <code class="inline">python3-usb</code> here (not <code class="inline">pip3 install pyusb</code>) is deliberate — last time, pip installed it only for the normal user, and since the script needs to run as root (via <code class="inline">sudo</code>) to access the USB device, root couldn't see it and every run failed with <code class="inline">ModuleNotFoundError: No module named 'usb'</code>. This apt package installs it system-wide, visible to root too.</p>
+<p class="note"><b>If this exact error still appears anyway</b> (<code class="inline">ModuleNotFoundError: No module named 'usb'</code> when running with <code class="inline">sudo</code>): run <code class="inline">sudo pip3 install --break-system-packages pyusb</code> instead — note the <code class="inline">sudo</code> before <code class="inline">pip3</code> this time, which installs it for root directly.</p>
 
 <h3>Step 5 — Get back to a fresh live connection</h3>
 <p>Whatever terminal still shows "pongoOS>" — press <code class="inline">Ctrl+C</code> in it to close that session (our script needs to open the USB connection itself, so that old one needs to let go of it first).</p>
 <p>Then: unplug the iPad, wait 5-10 seconds, plug it back in, redo DFU entry (Section 5), and — from wherever you saved <code class="inline">palera1n-linux-x86_64</code> (likely <code class="inline">~/Desktop</code>) — run it again:</p>
 <pre>cd ~/Desktop && sudo ./palera1n-linux-x86_64 -p</pre>
-<p>Wait for the same "Checkmate!" → PongoOS banner you got before. This should now go faster since you already know the working port/cable setup. Once you see the <code class="inline">pongoOS&gt;</code> prompt again, press <code class="inline">Ctrl+C</code> immediately to free up the connection for our own script.</p>
+<p>Wait for the same "Checkmate!" → PongoOS banner you got before. This should go faster now since you already know the working port/cable setup. <b>Note:</b> if you see "Timed out waiting for download mode" appear, don't assume it failed right away — last time it recovered on its own a few seconds later and succeeded anyway. Give it 5-10 extra seconds before deciding to retry.</p>
+<p>Check what you land on:</p>
+<ul>
+<li>If you see a <code class="inline">pongoOS&gt;</code> prompt sitting there: press <code class="inline">Ctrl+C</code> to free up the connection for our own script.</li>
+<li>If it already returned you to a normal shell prompt (like <code class="inline">ubuntu@ubuntu:~$</code>) without showing <code class="inline">pongoOS&gt;</code>: you're already free to continue, no Ctrl+C needed.</li>
+</ul>
 
 <h3>Step 6 — Run our script for real</h3>
 <pre>cd ~/project3</pre>
