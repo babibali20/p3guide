@@ -153,32 +153,8 @@ DisplayName: iPad Air 2 (WiFi)</pre>
 </div>
 
 <div class="part" style="border-color:var(--accent)">
-<h2><span class="num">10</span> Fixing "Checkmate!" then "Timed out waiting for download mode"</h2>
-<p>This exact message means the exploit already worked — you're past the hard part. This specific error is common and documented; here is everything known to help it, worth doing <b>all together</b>, not one at a time, since tonight's goal is getting it working, not isolating which one mattered:</p>
-
-<h3>Do all of these before your next batch of attempts:</h3>
-<ol>
-<li><b>Unplug the laptop's charger — run on battery only.</b> AC power noise is a documented cause of exactly this failure on some laptops.</li>
-<li><b>Use a different physical USB port</b> if the laptop has more than one free. USB 3.0 ports (often blue inside) are more likely to cause this than USB 2.0 ones — prefer a USB 2.0 port if you can identify one.</li>
-<li><b>Make sure there is no USB hub, dock, or extension cable</b> between the iPad and the laptop — plug directly into the laptop's own port.</li>
-<li><b>If you have a second USB-A cable available</b> (even an old one), try swapping it — shorter, simpler cables tend to be more reliable here than long or "fast charging" ones.</li>
-<li><b>Wait a full 5-10 seconds</b> after unplugging the iPad before plugging it back in (longer than before).</li>
-</ol>
-
-<h3>Then retry generously — this can genuinely take many attempts:</h3>
-<p>With the changes above in place: redo DFU entry (step 5) → run the safe check (<code class="inline">-I</code>, confirm Mode: DFU) → run <code class="inline">sudo ./palera1n-linux-x86_64 -p</code>. If it fails the same way, unplug/replug (5-10 sec wait), redo DFU, try again.</p>
-<p><b>Give this at least 15-20 attempts</b> before concluding it's not working — reaching "Checkmate!" reliably (which you already have) means the hardware/exploit combination genuinely works, and this specific reconnect step is known to sometimes just need persistence. Don't stop at attempt 5 or 6 and assume it's hopeless.</p>
-
-<h3>Optional extra things to check if 15-20 tries with the above still fail:</h3>
-<ul>
-<li><b>If the iPad has a passcode set:</b> reported to interfere with this exact step on some devices. If easy to do, temporarily turning off the passcode (Settings → Face/Touch ID & Passcode → Turn Passcode Off) before starting DFU mode is worth trying.</li>
-<li><b>Full fresh restart of the Ubuntu USB itself</b> (not just the iPad) — cold shutdown, boot back into the USB, in case something in the current session's USB state is stuck.</li>
-<li><b>Get more detail for next time with extra logging:</b>
-<pre>sudo ./palera1n-linux-x86_64 -v -v -p</pre>
-This won't fix it alone, but if you do need to come back and ask, this output is far more useful to look at than the plain version.</li>
-</ul>
-
-<p class="note">If after genuinely working through all of this (15-20+ tries, power/port/cable changes, optionally the passcode check) it still fails the exact same way every time — that's the real point to stop and come back, ideally with the <code class="inline">-v -v</code> output. That's a real, worth-reporting result, not giving up early.</p>
+<h2><span class="num">10</span> If "Timed out waiting for download mode" appears</h2>
+<p>This means the exploit already worked ("Checkmate!") — this is just a reconnect hiccup after it, not a real failure. Confirmed reliable now with: <b>battery power (charger unplugged)</b>, a <b>non-USB-3.0 port</b>, direct connection (no hub), and the iPad and laptop in your current setup. Just unplug/replug (wait 5-10 sec), redo DFU entry, and run <code class="inline">-p</code> again — this has worked every time so far once the port was right.</p>
 </div>
 
 <div class="part" style="border-color:var(--accent)">
@@ -186,7 +162,10 @@ This won't fix it alone, but if you do need to come back and ask, this output is
 <p><b>You already succeeded at the hard part.</b> That "pongoOS 2.6.2-97c2800e" banner confirms it's the exact build our module was made for. This section gets our actual kernel/module files onto this Ubuntu session and runs them for real. It's a longer sequence — go slowly, one command block at a time.</p>
 
 <h3>Step 1 — Install GitHub's tool and log in (one-time)</h3>
-<pre>sudo snap install gh</pre>
+<pre>sudo snap install gh --classic</pre>
+<p class="note">The <code class="inline">--classic</code> is required — without it snap refuses to install gh at all.</p>
+<pre>sudo apt install -y git</pre>
+<p class="note">gh needs git present on the system even though we're not using git commands directly — without this, <code class="inline">gh auth login</code> succeeds but every actual gh command afterward fails with "unable to find git executable".</p>
 <pre>gh auth login</pre>
 <p>Answer the prompts: <b>GitHub.com</b> → <b>HTTPS</b> → <b>Login with a web browser</b>. It will show a code and tell you to open a URL. Open Firefox, go to that URL, type the code, click Authorize. Come back to the terminal — it should say you're logged in.</p>
 
@@ -207,16 +186,10 @@ This won't fix it alone, but if you do need to come back and ask, this output is
 <p class="note">Using <code class="inline">python3-usb</code> here (not <code class="inline">pip3 install pyusb</code>) is deliberate — last time, pip installed it only for the normal user, and since the script needs to run as root (via <code class="inline">sudo</code>) to access the USB device, root couldn't see it and every run failed with <code class="inline">ModuleNotFoundError: No module named 'usb'</code>. This apt package installs it system-wide, visible to root too.</p>
 <p class="note"><b>If this exact error still appears anyway</b> (<code class="inline">ModuleNotFoundError: No module named 'usb'</code> when running with <code class="inline">sudo</code>): run <code class="inline">sudo pip3 install --break-system-packages pyusb</code> instead — note the <code class="inline">sudo</code> before <code class="inline">pip3</code> this time, which installs it for root directly.</p>
 
-<h3>Step 5 — Get back to a fresh live connection</h3>
-<p>Whatever terminal still shows "pongoOS>" — press <code class="inline">Ctrl+C</code> in it to close that session (our script needs to open the USB connection itself, so that old one needs to let go of it first).</p>
-<p>Then: unplug the iPad, wait 5-10 seconds, plug it back in, redo DFU entry (Section 5), and — from wherever you saved <code class="inline">palera1n-linux-x86_64</code> (likely <code class="inline">~/Desktop</code>) — run it again:</p>
+<h3>Step 5 — Get a fresh live connection</h3>
+<p>From wherever you saved <code class="inline">palera1n-linux-x86_64</code> (likely <code class="inline">~/Desktop</code>):</p>
 <pre>cd ~/Desktop && sudo ./palera1n-linux-x86_64 -p</pre>
-<p>Wait for the same "Checkmate!" → PongoOS banner you got before. This should go faster now since you already know the working port/cable setup. <b>Note:</b> if you see "Timed out waiting for download mode" appear, don't assume it failed right away — last time it recovered on its own a few seconds later and succeeded anyway. Give it 5-10 extra seconds before deciding to retry.</p>
-<p>Check what you land on:</p>
-<ul>
-<li>If you see a <code class="inline">pongoOS&gt;</code> prompt sitting there: press <code class="inline">Ctrl+C</code> to free up the connection for our own script.</li>
-<li>If it already returned you to a normal shell prompt (like <code class="inline">ubuntu@ubuntu:~$</code>) without showing <code class="inline">pongoOS&gt;</code>: you're already free to continue, no Ctrl+C needed.</li>
-</ul>
+<p>Wait for "Checkmate!" then the PongoOS banner. Based on your last two runs this now works reliably with your current port/cable setup — if you see "Timed out waiting for download mode," don't panic, it recovered on its own within a few seconds both times before. Once it prints "Booting PongoOS..." the command finishes and hands you back a normal terminal prompt by itself — there is nothing left running that needs closing, on the laptop or the iPad. Just continue to the next step.</p>
 
 <h3>Step 6 — Run our script for real</h3>
 <pre>cd ~/project3</pre>

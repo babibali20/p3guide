@@ -174,60 +174,13 @@ E. ONCE YOU HAVE A REAL OUTCOME (success, or you've worked all the way
    branch you ended up on, and roughly how many tries it took.
 
 --------------------------------------------------------------------------------
-PART 10 — FIXING "Checkmate!" then "Timed out waiting for download mode"
+PART 10 — IF "Timed out waiting for download mode" APPEARS
 --------------------------------------------------------------------------------
-This exact message means the exploit already worked -- you're past the hard
-part. This specific error is common and documented; here is everything known
-to help it, worth doing ALL TOGETHER, not one at a time, since tonight's goal
-is getting it working, not isolating which change mattered:
-
-DO ALL OF THESE BEFORE YOUR NEXT BATCH OF ATTEMPTS:
-   1. Unplug the laptop's charger -- run on battery only. AC power noise is
-      a documented cause of exactly this failure on some laptops.
-   2. Use a different physical USB port if the laptop has more than one
-      free. USB 3.0 ports (often blue inside) are more likely to cause
-      this than USB 2.0 ones -- prefer a USB 2.0 port if you can identify
-      one.
-   3. Make sure there is no USB hub, dock, or extension cable between the
-      iPad and the laptop -- plug directly into the laptop's own port.
-   4. If you have a second USB-A cable available (even an old one), try
-      swapping it -- shorter, simpler cables tend to be more reliable
-      here than long or "fast charging" ones.
-   5. Wait a full 5-10 seconds after unplugging the iPad before plugging
-      it back in (longer than before).
-
-THEN RETRY GENEROUSLY -- this can genuinely take many attempts:
-   With the changes above in place: redo DFU entry (Part 5) -> run the
-   safe check (-I, confirm Mode: DFU) -> run
-   "sudo ./palera1n-linux-x86_64 -p". If it fails the same way, unplug/
-   replug (5-10 sec wait), redo DFU, try again.
-
-   GIVE THIS AT LEAST 15-20 ATTEMPTS before concluding it's not working --
-   reaching "Checkmate!" reliably (which you already have) means the
-   hardware/exploit combination genuinely works, and this specific
-   reconnect step is known to sometimes just need persistence. Don't stop
-   at attempt 5 or 6 and assume it's hopeless.
-
-OPTIONAL EXTRA THINGS TO CHECK if 15-20 tries with the above still fail:
-   - If the iPad has a passcode set: reported to interfere with this exact
-     step on some devices. If easy to do, temporarily turning off the
-     passcode (Settings -> Face/Touch ID & Passcode -> Turn Passcode Off)
-     before starting DFU mode is worth trying.
-   - Full fresh restart of the Ubuntu USB itself (not just the iPad) --
-     cold shutdown, boot back into the USB, in case something in the
-     current session's USB state is stuck.
-   - Get more detail for next time with extra logging:
-
-       sudo ./palera1n-linux-x86_64 -v -v -p
-
-     This won't fix it alone, but if you do need to come back and ask,
-     this output is far more useful to look at than the plain version.
-
-If after genuinely working through all of this (15-20+ tries, power/port/
-cable changes, optionally the passcode check) it still fails the exact same
-way every time -- that's the real point to stop and come back, ideally with
-the -v -v output. That's a real, worth-reporting result, not giving up
-early.
+This means the exploit already worked ("Checkmate!") -- this is just a
+reconnect hiccup after it, not a real failure. Confirmed reliable now with:
+battery power (charger unplugged), a non-USB-3.0 port, direct connection (no
+hub). Just unplug/replug (wait 5-10 sec), redo DFU entry, and run -p again --
+this has worked every time so far once the port was right.
 
 --------------------------------------------------------------------------------
 PART 11 — YOU HAVE A LIVE PONGOOS SHELL -- NOW UPLOAD THE REAL FILES
@@ -239,7 +192,16 @@ It's a longer sequence -- go slowly, one command block at a time.
 
 STEP 1 -- Install GitHub's tool and log in (one-time):
 
-    sudo snap install gh
+    sudo snap install gh --classic
+
+(The --classic is required -- without it snap refuses to install gh at all.)
+
+    sudo apt install -y git
+
+(gh needs git present on the system even though we're not using git
+commands directly -- without this, "gh auth login" succeeds but every
+actual gh command afterward fails with "unable to find git executable".)
+
     gh auth login
 
 Answer the prompts: GitHub.com -> HTTPS -> Login with a web browser. It
@@ -282,30 +244,19 @@ named 'usb' when running with sudo): run
 instead -- note the "sudo" before "pip3" this time, which installs it for
 root directly.)
 
-STEP 5 -- Get back to a fresh live connection:
-   Whatever terminal still shows "pongoOS>" -- press Ctrl+C in it to close
-   that session (our script needs to open the USB connection itself, so
-   that old one needs to let go of it first).
-
-   Then: unplug the iPad, wait 5-10 seconds, plug it back in, redo DFU
-   entry (Part 5), and -- from wherever you saved palera1n-linux-x86_64
-   (likely ~/Desktop) -- run it again:
+STEP 5 -- Get a fresh live connection:
+   From wherever you saved palera1n-linux-x86_64 (likely ~/Desktop):
 
        cd ~/Desktop && sudo ./palera1n-linux-x86_64 -p
 
-   Wait for the same "Checkmate!" -> PongoOS banner you got before. This
-   should go faster now since you already know the working port/cable
-   setup. NOTE: if you see "Timed out waiting for download mode" appear,
-   don't assume it failed right away -- last time it recovered on its own
-   a few seconds later and succeeded anyway. Give it 5-10 extra seconds
-   before deciding to retry.
-
-   Check what you land on:
-   - If you see a pongoOS> prompt sitting there: press Ctrl+C to free up
-     the connection for our own script.
-   - If it already returned you to a normal shell prompt (like
-     "ubuntu@ubuntu:~$") without showing pongoOS>: you're already free to
-     continue, no Ctrl+C needed.
+   Wait for "Checkmate!" then the PongoOS banner. Based on your last two
+   runs this now works reliably with your current port/cable setup -- if
+   you see "Timed out waiting for download mode," don't panic, it
+   recovered on its own within a few seconds both times before. Once it
+   prints "Booting PongoOS..." the command finishes and hands you back a
+   normal terminal prompt by itself -- there is nothing left running that
+   needs closing, on the laptop or the iPad. Just continue to the next
+   step.
 
 STEP 6 -- Run our script for real:
 

@@ -196,6 +196,22 @@ def run_static_validation(pkg_dir: Path, log: RunLog) -> bool:
 # ------------------------------------------------------------------ #
 # Real USB transport                                                   #
 # ------------------------------------------------------------------ #
+def _ensure_usb() -> None:
+    """Deferred, idempotent import of pyusb, bound as a module-level global.
+
+    Deliberately NOT a top-of-file import: --dry-run must work even before
+    pyusb/libusb is installed. Called at the start of every PongoDevice method
+    that touches usb.* (not just the entry points), so no method can ever again
+    rely on another method having imported it first -- exactly the bug class
+    that caused 'NameError: name usb is not defined' in read_serial_identity().
+    Python caches imports, so calling this repeatedly is cheap.
+    """
+    global usb
+    import usb.core          # noqa: F401
+    import usb.util          # noqa: F401
+    import usb.backend.libusb1  # noqa: F401
+
+
 class PongoDevice:
     """Thin wrapper around a live PongoOS USB shell. Opens nothing until connect()."""
 
@@ -205,13 +221,13 @@ class PongoDevice:
         self._libusb_dll = libusb_dll
 
     def _backend(self):
-        import usb.backend.libusb1 as libusb1
+        _ensure_usb()
         if self._libusb_dll:
-            return libusb1.get_backend(find_library=lambda x: self._libusb_dll)
-        return libusb1.get_backend()
+            return usb.backend.libusb1.get_backend(find_library=lambda x: self._libusb_dll)
+        return usb.backend.libusb1.get_backend()
 
     def list_devices(self) -> list:
-        import usb.core
+        _ensure_usb()
         backend = self._backend()
         if backend is None:
             raise OrchestratorError(
@@ -221,9 +237,7 @@ class PongoDevice:
         return list(usb.core.find(find_all=True, backend=backend))
 
     def connect(self, timeout_s: float = 30.0) -> None:
-        import usb.core
-        import usb.util
-
+        _ensure_usb()
         backend = self._backend()
         if backend is None:
             raise OrchestratorError("libusb backend could not be loaded.")
@@ -268,11 +282,12 @@ class PongoDevice:
         return bytes(self._dev.ctrl_transfer(0xA1, bRequest, wValue, wIndex, length, timeout=timeout_ms))
 
     def read_serial_identity(self) -> str:
+        _ensure_usb()
         sn = usb.util.get_string(self._dev, self._dev.iSerialNumber) if self._dev.iSerialNumber else ""
         return sn or ""
 
     def preflight_identity(self) -> None:
-        import usb.util  # noqa: F401  (imported for get_string above)
+        _ensure_usb()
         sn = self.read_serial_identity()
         self.log.write(f"Device iSerialNumber: {sn!r}")
         if f"CPID:{EXPECTED_CPID}" not in sn or f"BDID:{EXPECTED_BDID}" not in sn:
