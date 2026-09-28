@@ -79,7 +79,11 @@ RAMDISK_COMPRESSED_SIZE = 81111481
 RAMDISK_UNCOMPRESSED_SIZE = 136344064
 RAMDISK_UNCOMPRESSED_SHA256 = "56CB88BA5F41F21737EF0B71C7D735C4D534B16BECBBE8FE55312CB710B25E47"
 
-REQUIRED_PONGO_COMMANDS = {"modload", "xfb", "xargs", "ramdisk", "bootx", "loadxreloc"}
+REQUIRED_PONGO_COMMANDS = {"modload", "xfb", "xargs", "ramdisk", "bootx"}
+# 'loadxreloc' is deliberately NOT in this pre-flight set: it does not exist
+# in base PongoOS. It's a custom command reloc-loader-v3 registers only after
+# it has been uploaded and modload'd (verified in this file's own real "help"
+# output). Checking for it before that point always fails closed incorrectly.
 
 # bRequest values (pinned PongoOS 97c2800 src/shell/usbloader.c)
 REQ_SET_XFER_SIZE = 1     # 0x21, wLength=4 : set loader_xfer_size
@@ -334,8 +338,14 @@ class PongoDevice:
 
     def upload(self, data: bytes, label: str) -> None:
         self.log.write(f"Setting upload buffer size for {label}: {len(data)} bytes")
+        # NOTE: no separate "begin upload" request here. Per PongoOS's own
+        # usbloader.c, the SETSIZE request above already calls
+        # reallocate_loader_xfer_data(), which sets usbloader_is_waiting_xfer
+        # and arms the DMA transfer itself. A second bRequest=1 wLength=0
+        # request is refused by the firmware's own re-entry guard
+        # ("if (usbloader_is_waiting_xfer) return false;"), which is what
+        # produced the observed USBError [Errno 32] Pipe error.
         self._ctrl_out(REQ_SET_XFER_SIZE, data=struct.pack("<I", len(data)))
-        self._ctrl_out(REQ_UPLOAD_BEGIN)
         sent = 0
         t0 = time.monotonic()
         while sent < len(data):
