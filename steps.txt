@@ -252,7 +252,11 @@ named 'usb' when running with sudo): run
 instead -- note the "sudo" before "pip3" this time, which installs it for
 root directly.)
 
-STEP 5 -- Get a fresh live connection:
+STEP 5 -- Get a fresh live connection (SKIP THIS if you're still sitting at
+the live pongoOS prompt from Part 7/9D right now -- running -p again while
+already live is pointless and can knock you out of the working session for
+no reason. Only do this if the iPad rebooted, got unplugged, or this is a
+new Ubuntu boot where PongoOS isn't currently live):
    From wherever you saved palera1n-linux-x86_64 (likely ~/Desktop):
 
        cd ~/Desktop && sudo ./palera1n-linux-x86_64 -p

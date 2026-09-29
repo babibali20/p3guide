@@ -188,6 +188,7 @@ DisplayName: iPad Air 2 (WiFi)</pre>
 <p class="note"><b>If this exact error still appears anyway</b> (<code class="inline">ModuleNotFoundError: No module named 'usb'</code> when running with <code class="inline">sudo</code>): run <code class="inline">sudo pip3 install --break-system-packages pyusb</code> instead — note the <code class="inline">sudo</code> before <code class="inline">pip3</code> this time, which installs it for root directly.</p>
 
 <h3>Step 5 — Get a fresh live connection</h3>
+<p class="stop"><b>Skip this step</b> if you're still sitting at the live pongoOS prompt from Part 7/9D right now — running <code class="inline">-p</code> again while already live is pointless and can knock you out of the working session for no reason. Only do this if the iPad rebooted, got unplugged, or this is a new Ubuntu boot where PongoOS isn't currently live.</p>
 <p>From wherever you saved <code class="inline">palera1n-linux-x86_64</code> (likely <code class="inline">~/Desktop</code>):</p>
 <pre>cd ~/Desktop && sudo ./palera1n-linux-x86_64 -p</pre>
 <p>Wait for "Checkmate!" then the PongoOS banner. Based on your last two runs this now works reliably with your current port/cable setup — if you see "Timed out waiting for download mode," don't panic, it recovered on its own within a few seconds both times before. Once it prints "Booting PongoOS..." the command finishes and hands you back a normal terminal prompt by itself — there is nothing left running that needs closing, on the laptop or the iPad. Just continue to the next step.</p>
