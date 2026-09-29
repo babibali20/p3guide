@@ -395,20 +395,38 @@ def execute_boot_sequence(pkg_dir: Path, dev: PongoDevice, log: RunLog) -> None:
     # module (reloc-loader-v3) must therefore be uploaded and modload'd
     # BEFORE the donor kernel -- the donor kernel is loadxreloc's argument,
     # a separate custom command reloc-loader-v3 registers, never modload's.
+    #
+    # Upload ORDER here is deliberately monotonically increasing in size
+    # (reloc-loader-v3 < checkra1n-kpf-pongo < kernel < ramdisk). PongoOS's
+    # own usbloader.c only reallocates loader_xfer_recv_data when the new
+    # size is LARGER than the current buffer; a smaller upload reuses the
+    # same (bigger) buffer in place, and usbloader_xfer_done_cb's cache
+    # invalidate uses the stale (pre-reset-to-0) recv_count, effectively a
+    # no-op. Uploading the ~44MB kernel (heavily read by loadxreloc, so its
+    # bytes sit hot in D-cache) and THEN the much smaller KPF module into
+    # that same reused buffer let modload read stale cached kernel bytes
+    # instead of the freshly-DMA'd KPF bytes -- observed live as a real
+    # "not mach-o" rejection despite the uploaded file's hash (and its own
+    # magic bytes) being verified correct. Keeping every upload strictly
+    # larger than the last always hits PongoOS's fresh-allocation path
+    # instead, which has no stale-cache data to begin with. This doesn't
+    # change boot semantics: modload'ing KPF only registers its preboot
+    # hook here -- the actual patch-finding runs later during bootx, well
+    # after loadxreloc has staged the kernel regardless of upload order.
     reloc_module = (pkg_dir / "reloc-loader-v3").read_bytes()
     dev.upload(reloc_module, "reloc-loader-v3")
     out = dev.run_command("modload")
     require_markers(out, REQUIRED_SUCCESS_MARKERS["modload_reloc"], "modload_reloc")
 
-    kernel = (pkg_dir / "kernelcache.darwin22.20A5303i").read_bytes()
-    dev.upload(kernel, "kernelcache.darwin22.20A5303i")
-    out = dev.run_command("loadxreloc")
-    require_markers(out, REQUIRED_SUCCESS_MARKERS["loadxreloc"], "loadxreloc")
-
     kpf = (pkg_dir / "checkra1n-kpf-pongo").read_bytes()
     dev.upload(kpf, "checkra1n-kpf-pongo")
     out = dev.run_command("modload")
     require_markers(out, REQUIRED_SUCCESS_MARKERS["modload_kpf"], "modload_kpf")
+
+    kernel = (pkg_dir / "kernelcache.darwin22.20A5303i").read_bytes()
+    dev.upload(kernel, "kernelcache.darwin22.20A5303i")
+    out = dev.run_command("loadxreloc")
+    require_markers(out, REQUIRED_SUCCESS_MARKERS["loadxreloc"], "loadxreloc")
 
     dev.run_command("xfb")
     dev.run_command("xargs -v keepsyms=1 debug=0x2014e rootdev=md0")
