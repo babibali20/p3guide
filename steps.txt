@@ -208,6 +208,14 @@ Answer the prompts: GitHub.com -> HTTPS -> Login with a web browser. It
 will show a code and a URL. Open Firefox, go to that URL, type the code,
 click Authorize. Back in the terminal it should say you're logged in.
 
+IMPORTANT -- a step that's easy to silently miss: after entering the code,
+GitHub may show a "Confirm access" (sudo mode) screen instead of finishing
+right away. If you don't have GitHub Mobile linked, click "Send a code via
+email," check that inbox, and enter the code it sends. If you skip this
+screen, the terminal will just sit there and never say "Logged in" -- it
+looks like nothing is happening, but it's actually stuck waiting on this
+confirmation.
+
 STEP 2 -- Download the 4 real files (private) and our script (public):
 
     mkdir -p ~/project3 && cd ~/project3
