@@ -1,0 +1,8 @@
+RELAY FILE — paste terminal output here from whichever machine you're on,
+then push, and tell Claude "check LIVE_LOG.txt" in chat.
+
+Note: Claude cannot watch this file automatically — it only reads it when
+you say so. This doesn't remove a step, it replaces "paste in chat" with
+"paste here + git push + tell Claude to check." Use whichever feels easier.
+
+---

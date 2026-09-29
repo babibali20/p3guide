@@ -168,6 +168,7 @@ DisplayName: iPad Air 2 (WiFi)</pre>
 <p class="note">gh needs git present on the system even though we're not using git commands directly — without this, <code class="inline">gh auth login</code> succeeds but every actual gh command afterward fails with "unable to find git executable".</p>
 <pre>gh auth login</pre>
 <p>Answer the prompts: <b>GitHub.com</b> → <b>HTTPS</b> → <b>Login with a web browser</b>. It will show a code and tell you to open a URL. Open Firefox, go to that URL, type the code, click Authorize. Come back to the terminal — it should say you're logged in.</p>
+<p class="stop"><b>Easy to miss:</b> after entering the code, GitHub may show a "Confirm access" (sudo mode) screen instead of finishing right away. If you don't have GitHub Mobile linked, click "Send a code via email," check that inbox, and enter the code it sends. Skip this and the terminal just sits there forever looking like nothing is happening — it's actually stuck waiting on this confirmation.</p>
 
 <h3>Step 2 — Download the 4 real files (private) and our script (public)</h3>
 <pre>mkdir -p ~/project3 && cd ~/project3</pre>
