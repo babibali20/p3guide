@@ -5,6 +5,31 @@ Note: Claude cannot watch this file automatically — it only reads it when
 you say so. This doesn't remove a step, it replaces "paste in chat" with
 "paste here + git push + tell Claude to check." Use whichever feels easier.
 
+================================================================================
+CLAUDE RESPONSE 1 — run this on the Linux machine, then paste its output
+below as "Log 2" and push
+================================================================================
+Checking whether checkra1n-kpf-pongo's module_entry actually ran (it should
+have registered a "kpf" command and a "palera1n_flags" command -- the log
+didn't show its startup banner, so we need to confirm which happened):
+
+sudo python3 - <<'EOF'
+import sys
+sys.path.insert(0, '.')
+from orchestrator_v3 import PongoDevice, RunLog
+from pathlib import Path
+log = RunLog(Path('/tmp/kpf_check.log'))
+dev = PongoDevice(log)
+dev.connect()
+out = dev.run_command("help")
+print("=== has 'kpf' command? ===", "kpf" in out)
+print("=== has 'palera1n_flags' command? ===", "palera1n_flags" in out)
+EOF
+
+Run this from ~/project3 (same folder as orchestrator_v3.py). Paste the full
+output below, including the "help" command's full printed list.
+================================================================================
+
 ---
 Log 1
 
