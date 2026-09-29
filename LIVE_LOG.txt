@@ -6,3 +6,392 @@ you say so. This doesn't remove a step, it replaces "paste in chat" with
 "paste here + git push + tell Claude to check." Use whichever feels easier.
 
 ---
+Log
+
+ubuntu@ubuntu:~$ cd ~/Desktop
+ubuntu@ubuntu:~/Desktop$ wget https://github.com/palera1n/palera1n/releases/download/v2.0.0-beta.9/palera1n-linux-x86_64
+--2026-09-29 13:56:46--  https://github.com/palera1n/palera1n/releases/download/v2.0.0-beta.9/palera1n-linux-x86_64
+Resolving github.com (github.com)... 140.82.121.3
+Connecting to github.com (github.com)|140.82.121.3|:443... connected.
+HTTP request sent, awaiting response... 302 Found
+Location: https://release-assets.githubusercontent.com/github-production-release-asset/537803484/cfa349ff-1933-4106-a4d2-8dbc376da98d?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-09-29T14%3A49%3A01Z&rscd=attachment%3B+filename%3Dpalera1n-linux-x86_64&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-09-29T13%3A48%3A29Z&ske=2026-09-29T14%3A49%3A01Z&sks=b&skv=2018-11-09&sig=kpRJiosXxDqzrFH%2FjS1tYm6nZDxZrE7dn5Spn7SDh%2BU%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc5MDY5MDUwNiwibmJmIjoxNzkwNjkwMjA2LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.HUakV_XN1Bxt9XToQcpCeJ0mumatRPW2P7CQEfcItuU&response-content-disposition=attachment%3B%20filename%3Dpalera1n-linux-x86_64&response-content-type=application%2Foctet-stream [following]
+--2026-09-29 13:56:46--  https://release-assets.githubusercontent.com/github-production-release-asset/537803484/cfa349ff-1933-4106-a4d2-8dbc376da98d?sp=r&sv=2018-11-09&sr=b&spr=https&se=2026-09-29T14%3A49%3A01Z&rscd=attachment%3B+filename%3Dpalera1n-linux-x86_64&rsct=application%2Foctet-stream&skoid=96c2d410-5711-43a1-aedd-ab1947aa7ab0&sktid=398a6654-997b-47e9-b12b-9515b896b4de&skt=2026-09-29T13%3A48%3A29Z&ske=2026-09-29T14%3A49%3A01Z&sks=b&skv=2018-11-09&sig=kpRJiosXxDqzrFH%2FjS1tYm6nZDxZrE7dn5Spn7SDh%2BU%3D&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnaXRodWIuY29tIiwiYXVkIjoicmVsZWFzZS1hc3NldHMuZ2l0aHVidXNlcmNvbnRlbnQuY29tIiwia2V5Ijoia2V5MSIsImV4cCI6MTc5MDY5MDUwNiwibmJmIjoxNzkwNjkwMjA2LCJwYXRoIjoicmVsZWFzZWFzc2V0cHJvZHVjdGlvbi5ibG9iLmNvcmUud2luZG93cy5uZXQifQ.HUakV_XN1Bxt9XToQcpCeJ0mumatRPW2P7CQEfcItuU&response-content-disposition=attachment%3B%20filename%3Dpalera1n-linux-x86_64&response-content-type=application%2Foctet-stream
+Resolving release-assets.githubusercontent.com (release-assets.githubusercontent.com)... 185.199.110.133, 185.199.111.133, 185.199.108.133, ...
+Connecting to release-assets.githubusercontent.com (release-assets.githubusercontent.com)|185.199.110.133|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 4539192 (4.3M) [application/octet-stream]
+Saving to: ‘palera1n-linux-x86_64’
+
+palera1n-linux-x86_ 100%[==================>]   4.33M  16.0MB/s    in 0.3s    
+
+2026-09-29 13:56:47 (16.0 MB/s) - ‘palera1n-linux-x86_64’ saved [4539192/4539192]
+
+ubuntu@ubuntu:~/Desktop$ chmod +x palera1n-linux-x86_64
+ubuntu@ubuntu:~/Desktop$ sha256sum palera1n-linux-x86_64
+5b6dec3a7ee15b14e989466a098d02edeb8455070009ffaa228caf2b3298dbd8  palera1n-linux-x86_64
+ubuntu@ubuntu:~/Desktop$ sudo ./palera1n-linux-x86_64 -p
+# == palera1n-c == 
+#
+# Made by: Nick Chan, Ploosh, Samara, Mineek, staturnz, kok3shidoll 
+#
+# Thanks to: pythonplayer123, llsc12, Nebula, tihmstar, nikias
+# (libimobiledevice), checkra1n team (Siguza, axi0mx, littlelailo
+# et al.), Procursus Team (Hayden Seay, Cameron Katri, Keto et.al)
+
+ - [09/29/26 13:58:39] <Info>: Waiting for devices
+ - [09/29/26 13:58:39] <Info>: Entering recovery mode
+ - [09/29/26 13:58:48] <Info>: Press Enter when ready for DFU mode
+
+Get ready (0)
+Hold home + power button (0)
+Hold home button (3)
+ - [09/29/26 13:59:05] <Info>: Device entered DFU mode successfully
+ - [09/29/26 13:59:05] <Info>: About to execute checkra1n
+#
+# Checkra1n 0.1337.2
+#
+# Proudly written in nano
+# (c) 2019-2023 Kim Jong Cracks
+#
+#========  Made by  =======
+# argp, axi0mx, danyl931, jaywalker, kirb, littlelailo, nitoTV
+# never_released, nullpixel, pimskeks, qwertyoruiop, sbingner, siguza
+#======== Thanks to =======
+# haifisch, jndok, jonseals, xerub, lilstevie, psychotea, sferrini
+# Cellebrite (ih8sn0w, cjori, ronyrus et al.)
+#==========================
+
+ - [09/29/26 13:59:05] <Info>: Waiting for DFU mode devices
+ - [09/29/26 13:59:05] <Verbose>: DFU mode device found
+ - [09/29/26 13:59:05] <Info>: Checking if device is ready
+ - [09/29/26 13:59:05] <Verbose>: Attempting to perform checkm8 on 7001 01
+ - [09/29/26 13:59:05] <Info>: Setting up the exploit
+ - [09/29/26 13:59:05] <Verbose>: == checkm8 setup stage ==
+ - [09/29/26 13:59:05] <Verbose>: UaF race: setup packet was accepted, attempting heuristic strategy
+ - [09/29/26 13:59:05] <Verbose>: UaF race: heuristic strategy was successful
+ - [09/29/26 13:59:05] <Verbose>: Entered initial checkm8 state after 1 steps
+ - [09/29/26 13:59:05] <Verbose>: DFU mode device disconnected
+ - [09/29/26 13:59:06] <Verbose>: DFU mode device found
+ - [09/29/26 13:59:06] <Verbose>: == checkm8 trigger stage ==
+ - [09/29/26 13:59:06] <Info>: Checkmate!
+ - [09/29/26 13:59:06] <Verbose>: Device should now reconnect in download mode
+ - [09/29/26 13:59:06] <Verbose>: DFU mode device disconnected
+ - [09/29/26 13:59:26] <Error>: Timed out waiting for download mode (error code: -status_exploit_timeout_error)
+ - [09/29/26 13:59:30] <Info>: Entered download mode
+ - [09/29/26 13:59:30] <Verbose>: Download mode device found
+ - [09/29/26 13:59:30] <Info>: Booting PongoOS...
+ubuntu@ubuntu:~/Desktop$ sudo snap install gh --classic
+gh 2.86.0-112-gc30647b78 from Casper (casper-dcl) installed
+ubuntu@ubuntu:~/Desktop$ sudo apt install -y git
+Installing:                     
+  git
+
+Installing dependencies:
+  git-man  liberror-perl
+
+Suggested packages:
+  git-doc  git-email  git-gui  gitk  gitweb  git-cvs  git-svn
+
+Summary:
+  Upgrading: 0, Installing: 3, Removing: 0, Not Upgrading: 0
+  Download size: 5453 kB
+  Space needed: 28.4 MB / 7868 MB available
+
+Get:1 http://archive.ubuntu.com/ubuntu resolute/main amd64 liberror-perl all 0.17030-1 [23.5 kB]
+Get:2 http://archive.ubuntu.com/ubuntu resolute/main amd64 git-man all 1:2.53.0-1ubuntu1 [1202 kB]
+Get:3 http://archive.ubuntu.com/ubuntu resolute/main amd64 git amd64 1:2.53.0-1ubuntu1 [4227 kB]
+Fetched 5453 kB in 1s (6527 kB/s)
+Selecting previously unselected package liberror-perl.
+(Reading database ... 209513 files and directories currently installed.)
+Preparing to unpack .../liberror-perl_0.17030-1_all.deb ...
+Unpacking liberror-perl (0.17030-1) ...
+Selecting previously unselected package git-man.
+Preparing to unpack .../git-man_1%3a2.53.0-1ubuntu1_all.deb ...
+Unpacking git-man (1:2.53.0-1ubuntu1) ...
+Selecting previously unselected package git.
+Preparing to unpack .../git_1%3a2.53.0-1ubuntu1_amd64.deb ...
+Unpacking git (1:2.53.0-1ubuntu1) ...
+Setting up liberror-perl (0.17030-1) ...
+Setting up git-man (1:2.53.0-1ubuntu1) ...
+Setting up git (1:2.53.0-1ubuntu1) ...
+Processing triggers for man-db (2.13.1-1build1) ...
+ubuntu@ubuntu:~/Desktop$ gh auth login
+? Where do you use GitHub? GitHub.com
+? What is your preferred protocol for Git operations on this host? HTTPS
+? Authenticate Git with your GitHub credentials? Yes
+? How would you like to authenticate GitHub CLI? Login with a web browser
+
+! First copy your one-time code: B14D-B331
+Press Enter to open https://github.com/login/device in your browser... 
+Gtk-Message: 14:01:18.805: Not loading module "atk-bridge": The functionality is provided by GTK natively. Please try to not load it.
+✓ Authentication complete.
+- gh config set -h github.com git_protocol https
+✓ Configured git protocol
+! Authentication credentials saved in plain text
+✓ Logged in as babibali20
+ubuntu@ubuntu:~/Desktop$ mkdir -p ~/project3 && cd ~/project3
+ubuntu@ubuntu:~/project3$ gh release download pongo-upload --repo babibali20/p3files
+ubuntu@ubuntu:~/project3$ wget https://raw.githubusercontent.com/babibali20/p3guide/master/orchestrator_v3.py
+--2026-09-29 14:02:26--  https://raw.githubusercontent.com/babibali20/p3guide/master/orchestrator_v3.py
+Resolving raw.githubusercontent.com (raw.githubusercontent.com)... 2606:50c0:8003::154, 2606:50c0:8000::154, 2606:50c0:8001::154, ...
+Connecting to raw.githubusercontent.com (raw.githubusercontent.com)|2606:50c0:8003::154|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 20979 (20K) [text/plain]
+Saving to: ‘orchestrator_v3.py’
+
+orchestrator_v3.py  100%[==================>]  20.49K  --.-KB/s    in 0.002s  
+
+2026-09-29 14:02:27 (13.0 MB/s) - ‘orchestrator_v3.py’ saved [20979/20979]
+
+ubuntu@ubuntu:~/project3$ sudo apt update
+Ign:1 file:/cdrom resolute InRelease
+Get:2 file:/cdrom resolute Release [664 B]
+Get:2 file:/cdrom resolute Release [664 B]
+Get:4 http://security.ubuntu.com/ubuntu resolute-security InRelease [137 kB]  
+Hit:5 http://archive.ubuntu.com/ubuntu resolute InRelease
+Get:6 http://archive.ubuntu.com/ubuntu resolute-updates InRelease [137 kB]
+Get:7 http://security.ubuntu.com/ubuntu resolute-security/main i386 Packages [214 kB]
+Get:8 http://archive.ubuntu.com/ubuntu resolute-backports InRelease [137 kB]
+Get:9 http://archive.ubuntu.com/ubuntu resolute-updates/main i386 Packages [312 kB]
+Get:10 http://security.ubuntu.com/ubuntu resolute-security/main amd64 Packages [543 kB]
+Get:11 http://archive.ubuntu.com/ubuntu resolute-updates/main amd64 Packages [679 kB]
+Get:12 http://security.ubuntu.com/ubuntu resolute-security/main Translation-en [127 kB]
+Get:13 http://security.ubuntu.com/ubuntu resolute-security/main amd64 Components [46.7 kB]
+Get:14 http://security.ubuntu.com/ubuntu resolute-security/universe amd64 Packages [187 kB]
+Get:15 http://security.ubuntu.com/ubuntu resolute-security/universe i386 Packages [107 kB]
+Get:16 http://security.ubuntu.com/ubuntu resolute-security/universe Translation-en [59.3 kB]
+Get:17 http://security.ubuntu.com/ubuntu resolute-security/universe amd64 Components [43.4 kB]
+Get:18 http://security.ubuntu.com/ubuntu resolute-security/restricted i386 Packages [14.3 kB]
+Get:19 http://security.ubuntu.com/ubuntu resolute-security/restricted amd64 Packages [443 kB]
+Get:20 http://archive.ubuntu.com/ubuntu resolute-updates/main Translation-en [162 kB]
+Get:21 http://archive.ubuntu.com/ubuntu resolute-updates/main amd64 Components [98.0 kB]
+Get:22 http://archive.ubuntu.com/ubuntu resolute-updates/universe i386 Packages [164 kB]
+Get:23 http://security.ubuntu.com/ubuntu resolute-security/restricted Translation-en [87.8 kB]
+Get:24 http://archive.ubuntu.com/ubuntu resolute-updates/universe amd64 Packages [308 kB]
+Get:25 http://security.ubuntu.com/ubuntu resolute-security/multiverse amd64 Packages [10.8 kB]
+Get:26 http://security.ubuntu.com/ubuntu resolute-security/multiverse i386 Packages [2412 B]
+Get:27 http://security.ubuntu.com/ubuntu resolute-security/multiverse Translation-en [2844 B]
+Get:28 http://archive.ubuntu.com/ubuntu resolute-updates/universe Translation-en [98.9 kB]
+Get:29 http://archive.ubuntu.com/ubuntu resolute-updates/universe amd64 Components [190 kB]
+Get:30 http://archive.ubuntu.com/ubuntu resolute-updates/universe Icons (48x48) [53.8 kB]
+Get:31 http://archive.ubuntu.com/ubuntu resolute-updates/universe Icons (64x64) [91.9 kB]
+Get:32 http://archive.ubuntu.com/ubuntu resolute-updates/restricted i386 Packages [14.3 kB]
+Get:33 http://archive.ubuntu.com/ubuntu resolute-updates/restricted amd64 Packages [457 kB]
+Get:34 http://archive.ubuntu.com/ubuntu resolute-updates/restricted Translation-en [90.8 kB]
+Get:35 http://archive.ubuntu.com/ubuntu resolute-updates/multiverse amd64 Packages [11.6 kB]
+Get:36 http://archive.ubuntu.com/ubuntu resolute-updates/multiverse i386 Packages [2412 B]
+Get:37 http://archive.ubuntu.com/ubuntu resolute-updates/multiverse Translation-en [3172 B]
+Get:38 http://archive.ubuntu.com/ubuntu resolute-backports/universe amd64 Components [1056 B]
+Fetched 5036 kB in 1s (4028 kB/s)   
+219 packages can be upgraded. Run 'apt list --upgradable' to see them.
+Notice: Skipping acquire of configured file 'main/binary-i386/Packages' as repository 'file:/cdrom resolute InRelease' doesn't support architecture 'i386'
+Notice: Skipping acquire of configured file 'restricted/binary-i386/Packages' as repository 'file:/cdrom resolute InRelease' doesn't support architecture 'i386'
+ubuntu@ubuntu:~/project3$ sudo apt install -y python3-usb libusb-1.0-0
+libusb-1.0-0 is already the newest version (2:1.0.29-2build1).
+libusb-1.0-0 set to manually installed.
+Installing:                 
+  python3-usb
+
+Summary:
+  Upgrading: 0, Installing: 1, Removing: 0, Not Upgrading: 219
+  Download size: 38.4 kB
+  Space needed: 249 kB / 7674 MB available
+
+Get:1 http://archive.ubuntu.com/ubuntu resolute/universe amd64 python3-usb all 1.2.1-2 [38.4 kB]
+Fetched 38.4 kB in 0s (236 kB/s)      
+Selecting previously unselected package python3-usb.
+(Reading database ... 210654 files and directories currently installed.)
+Preparing to unpack .../python3-usb_1.2.1-2_all.deb ...
+Unpacking python3-usb (1.2.1-2) ...
+Setting up python3-usb (1.2.1-2) ...
+ubuntu@ubuntu:~/project3$ cd ~/Desktop && sudo ./palera1n-linux-x86_64 -p
+# == palera1n-c == 
+#
+# Made by: Nick Chan, Ploosh, Samara, Mineek, staturnz, kok3shidoll 
+#
+# Thanks to: pythonplayer123, llsc12, Nebula, tihmstar, nikias
+# (libimobiledevice), checkra1n team (Siguza, axi0mx, littlelailo
+# et al.), Procursus Team (Hayden Seay, Cameron Katri, Keto et.al)
+
+ - [09/29/26 14:03:17] <Info>: Waiting for devices
+ - [09/29/26 14:04:17] <Info>: Found PongoOS USB Device
+ - [09/29/26 14:04:18] <Info>: Booting Kernel...
+ubuntu@ubuntu:~/Desktop$ cd ~/Desktop && sudo ./palera1n-linux-x86_64 -p
+# == palera1n-c == 
+#
+# Made by: Nick Chan, Ploosh, Samara, Mineek, staturnz, kok3shidoll 
+#
+# Thanks to: pythonplayer123, llsc12, Nebula, tihmstar, nikias
+# (libimobiledevice), checkra1n team (Siguza, axi0mx, littlelailo
+# et al.), Procursus Team (Hayden Seay, Cameron Katri, Keto et.al)
+
+ - [09/29/26 14:04:55] <Info>: Waiting for devices
+ - [09/29/26 14:05:21] <Info>: Entering recovery mode
+ - [09/29/26 14:05:29] <Info>: Press Enter when ready for DFU mode
+
+Get ready (0)
+Hold home + power button (0)
+Hold home button (4)
+ - [09/29/26 14:05:46] <Info>: Device entered DFU mode successfully
+ - [09/29/26 14:05:46] <Info>: About to execute checkra1n
+#
+# Checkra1n 0.1337.2
+#
+# Proudly written in nano
+# (c) 2019-2023 Kim Jong Cracks
+#
+#========  Made by  =======
+# argp, axi0mx, danyl931, jaywalker, kirb, littlelailo, nitoTV
+# never_released, nullpixel, pimskeks, qwertyoruiop, sbingner, siguza
+#======== Thanks to =======
+# haifisch, jndok, jonseals, xerub, lilstevie, psychotea, sferrini
+# Cellebrite (ih8sn0w, cjori, ronyrus et al.)
+#==========================
+
+ - [09/29/26 14:05:46] <Info>: Waiting for DFU mode devices
+ - [09/29/26 14:05:46] <Verbose>: DFU mode device found
+ - [09/29/26 14:05:46] <Info>: Checking if device is ready
+ - [09/29/26 14:05:46] <Verbose>: Attempting to perform checkm8 on 7001 01
+ - [09/29/26 14:05:46] <Info>: Setting up the exploit
+ - [09/29/26 14:05:46] <Verbose>: == checkm8 setup stage ==
+ - [09/29/26 14:05:46] <Verbose>: UaF race: setup packet was accepted, attempting heuristic strategy
+ - [09/29/26 14:05:46] <Verbose>: UaF race: heuristic strategy was successful
+ - [09/29/26 14:05:46] <Verbose>: Entered initial checkm8 state after 1 steps
+ - [09/29/26 14:05:46] <Verbose>: DFU mode device disconnected
+ - [09/29/26 14:05:47] <Verbose>: DFU mode device found
+ - [09/29/26 14:05:47] <Verbose>: == checkm8 trigger stage ==
+ - [09/29/26 14:05:47] <Info>: Checkmate!
+ - [09/29/26 14:05:47] <Verbose>: Device should now reconnect in download mode
+ - [09/29/26 14:05:47] <Verbose>: DFU mode device disconnected
+ - [09/29/26 14:06:07] <Error>: Timed out waiting for download mode (error code: -status_exploit_timeout_error)
+ - [09/29/26 14:06:11] <Info>: Entered download mode
+ - [09/29/26 14:06:11] <Verbose>: Download mode device found
+ - [09/29/26 14:06:11] <Info>: Booting PongoOS...
+ubuntu@ubuntu:~/Desktop$ cd ~/project3
+ubuntu@ubuntu:~/project3$ sudo python3 orchestrator_v3.py --dry-run --pkg-dir .
+[2026-09-29T14:08:24.924859Z] ================================================================
+[2026-09-29T14:08:24.924944Z] STATIC PACKAGE VALIDATION
+[2026-09-29T14:08:24.924987Z] ================================================================
+[2026-09-29T14:08:25.123833Z] OK: kernelcache.darwin22.20A5303i size=44285952 sha256=E09B9279AA7418EC22F54A2DF3EDD38E732DC967C559CBD9D80FD5CFDC2CB4B2
+[2026-09-29T14:08:25.124400Z] OK: reloc-loader-v3 size=51304 sha256=E5176595B567CB196F1BB348FF433B51F40E9A7B8565F42335864A65789194B4
+[2026-09-29T14:08:25.125118Z] OK: checkra1n-kpf-pongo size=115264 sha256=D780687BB5B9E0206FAA8A287F95F5E1D9A654B10F4FB8B3A34B92625881A0EF
+[2026-09-29T14:08:25.462625Z] OK: RestoreRamDisk.pongo.lzma size=81111481 sha256=807CAE6E43E47B960CF828E6FDE234EE58A4AA9946EED51FED093450A19003F1
+[2026-09-29T14:08:25.495427Z] OK: kernel UUID=5254C9FF-A9BB-380B-80C3-0FBCC29E20CA
+[2026-09-29T14:08:30.613169Z] OK: ramdisk decompressed size=136344064
+[2026-09-29T14:08:30.613264Z] OK: ramdisk decompressed sha256=56CB88BA5F41F21737EF0B71C7D735C4D534B16BECBBE8FE55312CB710B25E47
+[2026-09-29T14:08:30.613314Z] STATIC VALIDATION: PASS
+ubuntu@ubuntu:~/project3$ sudo python3 orchestrator_v3.py --list-devices
+[2026-09-29T14:09:25.106204Z] Found 7 USB device(s) via libusb.
+[2026-09-29T14:09:25.106302Z]   VID=1d6b PID=0003
+[2026-09-29T14:09:25.106361Z]   VID=0bda PID=0129
+[2026-09-29T14:09:25.106414Z]   VID=0bda PID=57b3
+[2026-09-29T14:09:25.106467Z]   VID=8087 PID=0aa7
+[2026-09-29T14:09:25.106521Z]   VID=05ac PID=4141
+[2026-09-29T14:09:25.106566Z]   VID=abcd PID=1234
+[2026-09-29T14:09:25.106612Z]   VID=1d6b PID=0002
+ubuntu@ubuntu:~/project3$ sudo python3 orchestrator_v3.py --execute --pkg-dir .
+[2026-09-29T14:09:39.728425Z] ================================================================
+[2026-09-29T14:09:39.728512Z] STATIC PACKAGE VALIDATION
+[2026-09-29T14:09:39.728559Z] ================================================================
+[2026-09-29T14:09:39.918638Z] OK: kernelcache.darwin22.20A5303i size=44285952 sha256=E09B9279AA7418EC22F54A2DF3EDD38E732DC967C559CBD9D80FD5CFDC2CB4B2
+[2026-09-29T14:09:39.919138Z] OK: reloc-loader-v3 size=51304 sha256=E5176595B567CB196F1BB348FF433B51F40E9A7B8565F42335864A65789194B4
+[2026-09-29T14:09:39.919785Z] OK: checkra1n-kpf-pongo size=115264 sha256=D780687BB5B9E0206FAA8A287F95F5E1D9A654B10F4FB8B3A34B92625881A0EF
+[2026-09-29T14:09:40.265818Z] OK: RestoreRamDisk.pongo.lzma size=81111481 sha256=807CAE6E43E47B960CF828E6FDE234EE58A4AA9946EED51FED093450A19003F1
+[2026-09-29T14:09:40.298711Z] OK: kernel UUID=5254C9FF-A9BB-380B-80C3-0FBCC29E20CA
+[2026-09-29T14:09:45.378821Z] OK: ramdisk decompressed size=136344064
+[2026-09-29T14:09:45.378919Z] OK: ramdisk decompressed sha256=56CB88BA5F41F21737EF0B71C7D735C4D534B16BECBBE8FE55312CB710B25E47
+[2026-09-29T14:09:45.378969Z] STATIC VALIDATION: PASS
+[2026-09-29T14:09:45.437389Z] Waiting up to 30s for PongoOS device (VID=05ac PID=4141)...
+[2026-09-29T14:09:45.439529Z] Device opened and configured.
+[2026-09-29T14:09:45.439602Z] ================================================================
+[2026-09-29T14:09:45.439637Z] LIVE EXECUTION — this will write to the connected device's RAM
+[2026-09-29T14:09:45.439674Z] ================================================================
+[2026-09-29T14:09:45.447535Z] Device iSerialNumber: 'CPID:7001 BDID:06 ECID:000319e410ea6526 SRTG:[PongoOS-2.6.2-97c2800e]'
+[2026-09-29T14:09:45.447635Z] Device identity PASS: CPID/BDID match iPad5,3/A8X/T7001.
+[2026-09-29T14:09:45.447692Z] >>> help
+[2026-09-29T14:09:45.598786Z] <<< 
+[2026-09-29T14:09:45.599014Z] <<< #==================
+[2026-09-29T14:09:45.599167Z] <<< #
+[2026-09-29T14:09:45.599269Z] <<< # pongoOS 2.6.2-97c2800e
+[2026-09-29T14:09:45.599367Z] <<< #
+[2026-09-29T14:09:45.599477Z] <<< # https://checkra.in
+[2026-09-29T14:09:45.599586Z] <<< #
+[2026-09-29T14:09:45.599704Z] <<< #==================
+[2026-09-29T14:09:45.599810Z] <<< Booted by: iBoot-7459.140.15
+[2026-09-29T14:09:45.599903Z] <<< Built with: Clang 14.0.0 (clang-1400.0.29.202)
+[2026-09-29T14:09:45.599984Z] <<< Running on: Apple A8X (T7001)
+[2026-09-29T14:09:45.600070Z] <<< 
+[2026-09-29T14:09:45.600217Z] <<< pongoOS>              aes | performs AES operations
+[2026-09-29T14:09:45.600334Z] <<<         bootargs | prints xnu bootargs struct
+[2026-09-29T14:09:45.600448Z] <<<            bootl | boots linux
+[2026-09-29T14:09:45.600556Z] <<<            bootr | boot raw image
+[2026-09-29T14:09:45.600653Z] <<<           bootux | boots unpatched xnu
+[2026-09-29T14:09:45.600751Z] <<<            bootx | boots xnu (patched, if such a module is loaded)
+[2026-09-29T14:09:45.600834Z] <<<            crash | branches to an invalid address
+[2026-09-29T14:09:45.600918Z] <<<               dt | parses loaded devicetree
+[2026-09-29T14:09:45.600988Z] <<<          fbclear | clears the framebuffer output (minus banner)
+[2026-09-29T14:09:45.601068Z] <<<           fbinfo | show framebuffer info
+[2026-09-29T14:09:45.601320Z] <<<         fbinvert | inverts framebuffer contents
+[2026-09-29T14:09:45.601398Z] <<<              fdt | load linux fdt from usb
+[2026-09-29T14:09:45.601500Z] <<<             fuse | fuse array access
+[2026-09-29T14:09:45.601640Z] <<<             help | shows this help message
+[2026-09-29T14:09:45.601738Z] <<<    linux_cmdline | update linux kernel command line
+[2026-09-29T14:09:45.601839Z] <<<            lsdev | prints hal devices tree
+[2026-09-29T14:09:45.601943Z] <<<              md8 | memory dump
+[2026-09-29T14:09:45.602048Z] <<<          modload | loads module
+[2026-09-29T14:09:45.602179Z] <<<           paging | tests paging
+[2026-09-29T14:09:45.602286Z] <<<            panic | calls panic()
+[2026-09-29T14:09:45.602391Z] <<<             peek | 32bit mem read
+[2026-09-29T14:09:45.602494Z] <<<         physdump | dumps a page of phys
+[2026-09-29T14:09:45.602611Z] <<<             poke | 32bit mem write
+[2026-09-29T14:09:45.602712Z] <<<               ps | lists current tasks and irq handlers
+[2026-09-29T14:09:45.602811Z] <<<          ramdisk | loads a ramdisk for xnu or linux
+[2026-09-29T14:09:45.602910Z] <<<        recursion | tests stack guards
+[2026-09-29T14:09:45.603013Z] <<<            reset | resets the device
+[2026-09-29T14:09:45.603134Z] <<<              sep | sep tools
+[2026-09-29T14:09:45.603230Z] <<<            spawn | starts a usermode process
+[2026-09-29T14:09:45.603283Z] <<<             spin | spins 1 second
+[2026-09-29T14:09:45.603327Z] <<<         synopsys | prints a synopsysotg register dump
+[2026-09-29T14:09:45.603374Z] <<<               tz | trustzone info
+[2026-09-29T14:09:45.603422Z] <<<          tz0_set | change tz0 registers
+[2026-09-29T14:09:45.603507Z] <<<     tz_blackbird | trustzone blackbird attack
+[2026-09-29T14:09:45.603609Z] <<<      tz_lockdown | trustzone lockdown
+[2026-09-29T14:09:45.603707Z] <<<            xargs | prints or sets xnu boot-args
+[2026-09-29T14:09:45.603807Z] <<<              xfb | gives xnu access to the framebuffer (for -v or -s)
+[2026-09-29T14:09:45.603909Z] <<< 
+[2026-09-29T14:09:45.604007Z] <<< pongoOS> 
+[2026-09-29T14:09:45.604177Z] All required commands present.
+[2026-09-29T14:09:45.604587Z] Setting upload buffer size for reloc-loader-v3: 51304 bytes
+[2026-09-29T14:09:45.607309Z] Uploaded reloc-loader-v3: 51304 bytes in 0.0s (22.61 MB/s)
+[2026-09-29T14:09:45.607444Z] >>> modload
+[2026-09-29T14:09:45.627712Z] <<< [modload_macho:i] Attempting to load a module
+[2026-09-29T14:09:45.627878Z] <<< [modload_macho:+] Loaded module codex_darwin22_reloc_loader_v3
+[2026-09-29T14:09:45.627972Z] <<< CODEX-RELOC-V3: loaded; no memory changed
+[2026-09-29T14:09:45.628138Z] <<< 
+[2026-09-29T14:09:45.628291Z] <<< pongoOS> 
+[2026-09-29T14:09:45.676572Z] Setting upload buffer size for kernelcache.darwin22.20A5303i: 44285952 bytes
+[2026-09-29T14:09:47.243978Z] Uploaded kernelcache.darwin22.20A5303i: 44285952 bytes in 1.6s (28.32 MB/s)
+[2026-09-29T14:09:47.244242Z] >>> loadxreloc
+[2026-09-29T14:09:47.622808Z] <<< CODEX-RELOC-V3: physBase=800c00000 memSize=7c4de000 topOfKernelData=803a68000
+[2026-09-29T14:09:47.623036Z] <<< CODEX-RELOC-V3: donor validated entry_off=179488 text_vmaddr=fffffff007004000
+[2026-09-29T14:09:47.623282Z] <<< CODEX-RELOC-V3: native_kernel_start=802a04000
+[2026-09-29T14:09:47.623456Z] <<< CODEX-RELOC-V3: alloc_start=803a68000 donor_end=8064a4000 margin=6aa32000
+[2026-09-29T14:09:47.623620Z] <<< CODEX-RELOC-V3: preflight 2703 pages starting pa=803a68000
+[2026-09-29T14:09:47.623763Z] <<< CODEX-RELOC-V3: preflight PASS all 2703 pages free
+[2026-09-29T14:09:47.623885Z] <<< CODEX-RELOC-V3: trampoline installed at cv=403be0c88 entry_cv=403be1488
+[2026-09-29T14:09:47.623996Z] <<< CODEX-RELOC-V3: proof: x1=0xC0DED22E after exit_to_el1_image
+[2026-09-29T14:09:47.624134Z] <<< CODEX-DARWIN22-STAGED
+[2026-09-29T14:09:47.624244Z] <<< CODEX-RELOC-V3: READY gEntryPoint=803be1488 gTopOfKernelData=8064a4000
+[2026-09-29T14:09:47.624338Z] <<< CODEX-RELOC-V3: uuid=5254c9ff-a9bb-380b-80c3-0fbcc29e20ca
+[2026-09-29T14:09:47.624429Z] <<< CODEX-RELOC-V3: text_vmaddr=fffffff007004000 entry_fileoff=179488
+[2026-09-29T14:09:47.624521Z] <<< CODEX-RELOC-V3: hardware proof = x1=0xC0DED22E after bootx
+[2026-09-29T14:09:47.624612Z] <<< 
+[2026-09-29T14:09:47.624707Z] <<< pongoOS> 
+[2026-09-29T14:09:47.625337Z] Setting upload buffer size for checkra1n-kpf-pongo: 115264 bytes
+[2026-09-29T14:09:47.630009Z] Uploaded checkra1n-kpf-pongo: 115264 bytes in 0.0s (28.60 MB/s)
+[2026-09-29T14:09:47.630301Z] >>> modload
+[2026-09-29T14:09:47.744700Z] <<< [modload_macho:i] Attempting to load a module
+[2026-09-29T14:09:47.744928Z] <<< 
+[2026-09-29T14:09:47.745161Z] <<< pongoOS> 
+[2026-09-29T14:09:47.745366Z] FAIL (closed): Step 'modload_kpf': required marker not found: 'KPF:'
+ubuntu@ubuntu:~/project3$ 
