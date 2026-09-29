@@ -6,7 +6,7 @@ you say so. This doesn't remove a step, it replaces "paste in chat" with
 "paste here + git push + tell Claude to check." Use whichever feels easier.
 
 ---
-Log
+Log 1
 
 ubuntu@ubuntu:~$ cd ~/Desktop
 ubuntu@ubuntu:~/Desktop$ wget https://github.com/palera1n/palera1n/releases/download/v2.0.0-beta.9/palera1n-linux-x86_64
