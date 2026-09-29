@@ -355,6 +355,18 @@ class PongoDevice:
         elapsed = time.monotonic() - t0
         self.log.write(f"Uploaded {label}: {sent} bytes in {elapsed:.1f}s "
                         f"({sent / max(elapsed, 0.001) / 1e6:.2f} MB/s)")
+        # Settling delay: dev.write() returning only means the HOST finished
+        # transmitting -- PongoOS's own DMA-completion interrupt handler
+        # (usbloader_xfer_done_cb in usbloader.c) still has to fire on the
+        # device side to update loader_xfer_recv_count before a following
+        # 'modload'/'loadxreloc' can see the new data. Observed live: a small
+        # upload (reloc-loader-v3, 2 USB chunks) reliably won this race with
+        # no delay; a larger one (checkra1n-kpf-pongo, 4 chunks) consistently
+        # lost it, with modload reading incomplete/stale buffer state and
+        # rejecting it as "not mach-o". This fixed delay is a blunt fix --
+        # there is no exposed request to poll usbloader_is_waiting_xfer
+        # directly -- but it's cheap given how small these files are.
+        time.sleep(0.2)
 
 
 # ------------------------------------------------------------------ #
@@ -396,37 +408,29 @@ def execute_boot_sequence(pkg_dir: Path, dev: PongoDevice, log: RunLog) -> None:
     # BEFORE the donor kernel -- the donor kernel is loadxreloc's argument,
     # a separate custom command reloc-loader-v3 registers, never modload's.
     #
-    # Upload ORDER here is deliberately monotonically increasing in size
-    # (reloc-loader-v3 < checkra1n-kpf-pongo < kernel < ramdisk). PongoOS's
-    # own usbloader.c only reallocates loader_xfer_recv_data when the new
-    # size is LARGER than the current buffer; a smaller upload reuses the
-    # same (bigger) buffer in place, and usbloader_xfer_done_cb's cache
-    # invalidate uses the stale (pre-reset-to-0) recv_count, effectively a
-    # no-op. Uploading the ~44MB kernel (heavily read by loadxreloc, so its
-    # bytes sit hot in D-cache) and THEN the much smaller KPF module into
-    # that same reused buffer let modload read stale cached kernel bytes
-    # instead of the freshly-DMA'd KPF bytes -- observed live as a real
-    # "not mach-o" rejection despite the uploaded file's hash (and its own
-    # magic bytes) being verified correct. Keeping every upload strictly
-    # larger than the last always hits PongoOS's fresh-allocation path
-    # instead, which has no stale-cache data to begin with. This doesn't
-    # change boot semantics: modload'ing KPF only registers its preboot
-    # hook here -- the actual patch-finding runs later during bootx, well
-    # after loadxreloc has staged the kernel regardless of upload order.
+    # An earlier version of this function reordered uploads by size, on a
+    # theory that PongoOS's receive buffer only reallocates on growth and a
+    # shrinking reuse left stale cached data behind. That theory was tested
+    # and DISPROVEN live: usbloader_init() starts the buffer at 1MB, so
+    # neither reloc-loader-v3 (51KB) nor checkra1n-kpf-pongo (115KB) ever
+    # triggers a resize either way, yet the failure persisted regardless of
+    # order. The real fix is the settling delay in upload() above (see its
+    # comment) -- order here no longer matters, restored to the natural
+    # sequence: reloc module, then the donor kernel via loadxreloc, then KPF.
     reloc_module = (pkg_dir / "reloc-loader-v3").read_bytes()
     dev.upload(reloc_module, "reloc-loader-v3")
     out = dev.run_command("modload")
     require_markers(out, REQUIRED_SUCCESS_MARKERS["modload_reloc"], "modload_reloc")
 
-    kpf = (pkg_dir / "checkra1n-kpf-pongo").read_bytes()
-    dev.upload(kpf, "checkra1n-kpf-pongo")
-    out = dev.run_command("modload")
-    require_markers(out, REQUIRED_SUCCESS_MARKERS["modload_kpf"], "modload_kpf")
-
     kernel = (pkg_dir / "kernelcache.darwin22.20A5303i").read_bytes()
     dev.upload(kernel, "kernelcache.darwin22.20A5303i")
     out = dev.run_command("loadxreloc")
     require_markers(out, REQUIRED_SUCCESS_MARKERS["loadxreloc"], "loadxreloc")
+
+    kpf = (pkg_dir / "checkra1n-kpf-pongo").read_bytes()
+    dev.upload(kpf, "checkra1n-kpf-pongo")
+    out = dev.run_command("modload")
+    require_markers(out, REQUIRED_SUCCESS_MARKERS["modload_kpf"], "modload_kpf")
 
     dev.run_command("xfb")
     dev.run_command("xargs -v keepsyms=1 debug=0x2014e rootdev=md0")
